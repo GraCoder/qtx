@@ -178,8 +178,10 @@ public:
     QTextCursor find(const QString &subString, int from = 0, FindFlags options = 0) const;
     QTextCursor find(const QString &subString, const QTextCursor &from, FindFlags options = 0) const;
 
+#ifndef QT_NO_REGEXP
     QTextCursor find(const QRegExp &expr, int from = 0, FindFlags options = 0) const;
     QTextCursor find(const QRegExp &expr, const QTextCursor &from, FindFlags options = 0) const;
+#endif
 
     QTextFrame *frameAt(int pos) const;
     QTextFrame *rootFrame() const;

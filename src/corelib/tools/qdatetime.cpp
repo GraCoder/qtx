@@ -3302,6 +3302,7 @@ QDateTime QDateTime::fromString(const QString& s, Qt::DateFormat f)
             tmp.chop(1);
         }
 
+#ifndef QT_NO_REGEXP
         // Recognize timezone specifications
         QRegExp rx(QLatin1String("[+-]"));
         if (tmp.contains(rx)) {
@@ -3324,6 +3325,7 @@ QDateTime QDateTime::fromString(const QString& s, Qt::DateFormat f)
                 return dt;
             }
         }
+#endif
         return QDateTime(date, QTime::fromString(tmp, Qt::ISODate), ts);
     }
     case Qt::SystemLocaleDate:

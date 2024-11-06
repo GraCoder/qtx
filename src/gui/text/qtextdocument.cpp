@@ -1271,11 +1271,14 @@ void QTextDocument::setHtml(const QString &html)
 */
 QTextCursor QTextDocument::find(const QString &subString, int from, FindFlags options) const
 {
+#ifndef QT_NO_REGEXP
     QRegExp expr(subString);
     expr.setPatternSyntax(QRegExp::FixedString);
     expr.setCaseSensitivity((options & QTextDocument::FindCaseSensitively) ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
     return find(expr, from, options);
+#endif
+    return QTextCursor();
 }
 
 /*!
@@ -1304,14 +1307,19 @@ QTextCursor QTextDocument::find(const QString &subString, const QTextCursor &fro
         else
             pos = from.selectionEnd();
     }
+#ifndef QT_NO_REGEXP
     QRegExp expr(subString);
     expr.setPatternSyntax(QRegExp::FixedString);
     expr.setCaseSensitivity((options & QTextDocument::FindCaseSensitively) ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
     return find(expr, pos, options);
+#else
+    return QTextCursor();
+#endif
 }
 
 
+#ifndef QT_NO_REGEXP
 static bool findInBlock(const QTextBlock &block, const QRegExp &expression, int offset,
                         QTextDocument::FindFlags options, QTextCursor &cursor)
 {
@@ -1433,7 +1441,7 @@ QTextCursor QTextDocument::find(const QRegExp &expr, const QTextCursor &from, Fi
     }
     return find(expr, pos, options);
 }
-
+#endif
 
 /*!
     \fn QTextObject *QTextDocument::createObject(const QTextFormat &format)
@@ -2515,12 +2523,14 @@ void QTextHtmlExporter::emitFragment(const QTextFragment &fragment)
         QString forcedLineBreakRegExp = QString::fromLatin1("[\\na]");
         forcedLineBreakRegExp[3] = QChar::LineSeparator;
 
+#ifndef QT_NO_REGEXP
         const QStringList lines = txt.split(QRegExp(forcedLineBreakRegExp));
         for (int i = 0; i < lines.count(); ++i) {
             if (i > 0)
                 html += QLatin1String("<br />"); // space on purpose for compatibility with Netscape, Lynx & Co.
             html += lines.at(i);
         }
+#endif
     }
 
     if (attributesEmitted)

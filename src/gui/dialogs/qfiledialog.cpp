@@ -1101,6 +1101,7 @@ bool QFileDialog::isNameFilterDetailsVisible() const
 QStringList qt_strip_filters(const QStringList &filters)
 {
     QStringList strippedFilters;
+#ifndef QT_NO_REGEXP
     QRegExp r(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
     for (int i = 0; i < filters.count(); ++i) {
         QString filterName;
@@ -1109,6 +1110,7 @@ QStringList qt_strip_filters(const QStringList &filters)
             filterName = r.cap(1);
         strippedFilters.append(filterName.simplified());
     }
+#endif
     return strippedFilters;
 }
 
@@ -3056,12 +3058,15 @@ void QFileDialogPrivate::_q_goToDirectory(const QString &path)
 // Makes a list of filters from a normal filter string "Image Files (*.png *.jpg)"
 QStringList qt_clean_filter_list(const QString &filter)
 {
+#ifndef QT_NO_REGEXP
     QRegExp regexp(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
     QString f = filter;
     int i = regexp.indexIn(f);
     if (i >= 0)
         f = regexp.cap(2);
     return f.split(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
+    return QStringList();
 }
 
 /*!

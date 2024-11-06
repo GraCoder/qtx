@@ -773,12 +773,14 @@ static QString fbname(const QString &fileName) // get file basename (sort of)
             s = s.mid(i);
         if ((i = s.lastIndexOf(QLatin1Char('\\'))) >= 0)
             s = s.mid(i);
+#ifndef QT_NO_REGEXP
         QRegExp r(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*"));
         int p = r.indexIn(s);
         if (p == -1)
             s.clear();
         else
             s = s.mid(p, r.matchedLength());
+#endif
     }
     if (s.isEmpty())
         s = QString::fromLatin1("dummy");

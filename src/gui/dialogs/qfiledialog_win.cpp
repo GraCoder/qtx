@@ -109,17 +109,19 @@ const int maxMultiLen = 65535;
 static QString qt_win_extract_filter(const QString &rawFilter)
 {
     QString result = rawFilter;
+    QStringList list = result.split(QLatin1Char(' '));
+#ifndef QT_NO_REGEXP 
     QRegExp r(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
     int index = r.indexIn(result);
     if (index >= 0)
         result = r.cap(2);
-    QStringList list = result.split(QLatin1Char(' '));
     for(QStringList::iterator it = list.begin(); it < list.end(); ++it) {
         if (*it == QLatin1String("*")) {
             *it = QLatin1String("*.*");
             break;
         }
     }
+#endif
     return list.join(QLatin1String(";"));
 }
 
@@ -137,6 +139,7 @@ static QStringList qt_win_make_filters_list(const QString &filter)
 static QString qt_win_filter(const QString &filter, bool hideFiltersDetails)
 {
     QStringList filterLst = qt_win_make_filters_list(filter);
+#ifndef QT_NO_REGEXP 
     QStringList::Iterator it = filterLst.begin();
     QString winfilters;
     QRegExp r(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
@@ -157,6 +160,8 @@ static QString qt_win_filter(const QString &filter, bool hideFiltersDetails)
     }
     winfilters += QChar();
     return winfilters;
+#endif
+    return "";
 }
 
 static QString qt_win_selected_filter(const QString &filter, DWORD idx)

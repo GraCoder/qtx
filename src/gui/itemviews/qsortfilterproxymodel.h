@@ -85,8 +85,10 @@ public:
     QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
     QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
 
+#ifndef QT_NO_REGEXP
     QRegExp filterRegExp() const;
     void setFilterRegExp(const QRegExp &regExp);
+#endif
 
     int filterKeyColumn() const;
     void setFilterKeyColumn(int column);

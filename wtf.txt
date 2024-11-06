@@ -1,0 +1,3 @@
+D:\04_Dev\Qt\0\qtx\src\3rd\zlib\Release\zlib.lib
+D:\04_Dev\Qt\0\qtx\src\3rd\harfbuzz\Release\harfbuzz.lib
+D:\04_Dev\Qt\0\qtx\src\3rd\libpng\Release\libpng.lib

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26.0)
+cmake_minimum_required(VERSION 3.28)
 
 set(target_name QtCore)
 
@@ -48,4 +48,8 @@ target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtC
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/moc)
 
-target_link_libraries(${target_name} harfbuzz Ws2_32)
+target_link_libraries(${target_name} PRIVATE Ws2_32)
+
+target_link_libraries(${target_name} PRIVATE harfbuzz zlib)
+
+install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )

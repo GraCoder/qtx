@@ -15,6 +15,15 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+option(build_shared "" OFF)
+if(build_shared)
+set(target_flag SHARED)
+add_definitions(-DQT_MAKEDLL)
+else()
+set(target_flag STATIC)
+endif()
+
+
 add_subdirectory(src)
 
 add_subdirectory(test)

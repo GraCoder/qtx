@@ -29,6 +29,9 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${dialog_files})
 file(GLOB math_files math3d/*.cpp math3d/*.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${math_files})
 
+file(GLOB util_files util/*.cpp util/*.h)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${util_files})
+
 #file(MAKE_DIRECTORY 
 #    ${CMAKE_CURRENT_BINARY_DIR}/moc/paint
 #    ${CMAKE_CURRENT_BINARY_DIR}/moc/styles
@@ -68,7 +71,11 @@ add_library(${target_name} ${target_flag} ${rcc_files} ${uifiles}
   ${itemview_files}
   ${dialog_files}
   ${math_files}
+  ${util_files}
+  qtmain_win.cpp
 )
+
+#target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:libpng>)
 
 target_compile_definitions(${target_name} PRIVATE QT_BUILD_GUI_LIB)
 
@@ -78,4 +85,7 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/moc)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${target_name} QtCore libpng Ddraw DWrite)
+target_link_libraries(${target_name} PUBLIC QtCore Ddraw DWrite)
+target_link_libraries(${target_name} PRIVATE libpng)
+
+install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )

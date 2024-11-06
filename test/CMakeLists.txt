@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24.0)
+cmake_minimum_required(VERSION 3.28)
 
 set(target_name test)
 
@@ -7,6 +7,8 @@ set(source_files
 	MainDlg.h
 	MainDlg.cpp
 )
+
+set(CMAKE_AUTOMOC ON)
 
 add_executable(${target_name} ${source_files})
 

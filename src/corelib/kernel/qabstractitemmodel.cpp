@@ -2088,6 +2088,7 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role,
                     text = value.toString();
                 QString t = v.toString();
                 switch (matchType) {
+#ifndef QT_NO_REGEXP
                 case Qt::MatchRegExp:
                     if (QRegExp(text, cs).exactMatch(t))
                         result.append(idx);
@@ -2096,6 +2097,7 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role,
                     if (QRegExp(text, cs, QRegExp::Wildcard).exactMatch(t))
                         result.append(idx);
                     break;
+#endif
                 case Qt::MatchStartsWith:
                     if (t.startsWith(text, cs))
                         result.append(idx);

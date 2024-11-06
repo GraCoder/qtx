@@ -1875,10 +1875,13 @@ void qt_qFindChildren_helper(const QObject *parent, const QString &name, const Q
     for (int i = 0; i < children.size(); ++i) {
         obj = children.at(i);
         if (mo.cast(obj)) {
+#ifndef QT_NO_REGEXP
             if (re) {
                 if (re->indexIn(obj->objectName()) != -1)
                     list->append(obj);
-            } else {
+            } else 
+#endif
+            {
                 if (name.isNull() || obj->objectName() == name)
                     list->append(obj);
             }

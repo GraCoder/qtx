@@ -1412,7 +1412,9 @@ public:
     QPictureHandler(const char *f, const char *h, const QByteArray& fl,
                      picture_io_handler r, picture_io_handler w);
     QByteArray              format;                        // picture format
+#ifndef QT_NO_REGEXP
     QRegExp              header;                        // picture header pattern
+#endif
     enum TMode { Untranslated=0, TranslateIn, TranslateInOut } text_mode;
     picture_io_handler  read_picture;                // picture read function
     picture_io_handler  write_picture;                // picture write function
@@ -1421,7 +1423,10 @@ public:
 
 QPictureHandler::QPictureHandler(const char *f, const char *h, const QByteArray& fl,
                               picture_io_handler r, picture_io_handler w)
-    : format(f), header(QString::fromLatin1(h))
+    : format(f) 
+#ifndef QT_NO_REGEXP
+  ,header(QString::fromLatin1(h))
+#endif
 {
     text_mode = Untranslated;
     if (fl.contains('t'))
@@ -1799,6 +1804,8 @@ QByteArray QPictureIO::pictureFormat(QIODevice *d)
     for (int n = 0; n < rdlen; n++)
         if (buf[n] == '\0')
             buf[n] = '\001';
+
+#ifndef QT_NO_REGEXP
     if (rdlen > 0) {
         buf[rdlen - 1] = '\0';
         QString bufStr = QString::fromLatin1(buf);
@@ -1811,6 +1818,7 @@ QByteArray QPictureIO::pictureFormat(QIODevice *d)
             }
         }
     }
+#endif
     d->seek(pos);                                // restore position
     return format;
 }

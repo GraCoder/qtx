@@ -164,7 +164,9 @@ public:
     bool sort_localeaware;
 
     int filter_column;
+#ifndef QT_NO_REGEXP
     QRegExp filter_regexp;
+#endif
     int filter_role;
 
     bool dynamic_sortfilter;
@@ -2092,6 +2094,7 @@ Qt::SortOrder QSortFilterProxyModel::sortOrder() const
 
     \sa filterCaseSensitivity, setFilterWildcard(), setFilterFixedString()
 */
+#ifndef QT_NO_REGEXP
 QRegExp QSortFilterProxyModel::filterRegExp() const
 {
     Q_D(const QSortFilterProxyModel);
@@ -2104,6 +2107,7 @@ void QSortFilterProxyModel::setFilterRegExp(const QRegExp &regExp)
     d->filter_regexp = regExp;
     d->filter_changed();
 }
+#endif
 
 /*!
     \property QSortFilterProxyModel::filterKeyColumn
@@ -2136,6 +2140,7 @@ void QSortFilterProxyModel::setFilterKeyColumn(int column)
 
     \sa filterRegExp, sortCaseSensitivity
 */
+#ifndef QT_NO_REGEXP
 Qt::CaseSensitivity QSortFilterProxyModel::filterCaseSensitivity() const
 {
     Q_D(const QSortFilterProxyModel);
@@ -2150,6 +2155,7 @@ void QSortFilterProxyModel::setFilterCaseSensitivity(Qt::CaseSensitivity cs)
     d->filter_regexp.setCaseSensitivity(cs);
     d->filter_changed();
 }
+#endif
 
 /*!
     \since 4.2
@@ -2201,6 +2207,7 @@ void QSortFilterProxyModel::setSortLocaleAware(bool on)
     d->sort();
 }
 
+#ifndef QT_NO_REGEXP
 /*!
     \overload
 
@@ -2244,6 +2251,8 @@ void QSortFilterProxyModel::setFilterFixedString(const QString &pattern)
     d->filter_regexp.setPattern(pattern);
     d->filter_changed();
 }
+
+#endif
 
 /*!
     \since 4.2
