@@ -50,6 +50,7 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/mo
 
 target_link_libraries(${target_name} PRIVATE Ws2_32)
 
-target_link_libraries(${target_name} PRIVATE harfbuzz zlib)
+#target_link_libraries(${target_name} PRIVATE harfbuzz zlib)
+target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:harfbuzz> $<TARGET_OBJECTS:zlib>)
 
 install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )

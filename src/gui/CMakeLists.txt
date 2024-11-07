@@ -75,8 +75,6 @@ add_library(${target_name} ${target_flag} ${rcc_files} ${uifiles}
   qtmain_win.cpp
 )
 
-#target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:libpng>)
-
 target_compile_definitions(${target_name} PRIVATE QT_BUILD_GUI_LIB)
 
 target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtCore)
@@ -85,7 +83,8 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/moc)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${target_name} PUBLIC QtCore Ddraw DWrite)
-target_link_libraries(${target_name} PRIVATE libpng)
+target_link_libraries(${target_name} PUBLIC QtCore ddraw dwrite)
+#target_link_libraries(${target_name} PRIVATE libpng)
+target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:libpng>)
 
 install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )

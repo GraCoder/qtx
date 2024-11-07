@@ -38,9 +38,6 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#include "qregexp.h"
-
 #include "qalgorithms.h"
 #include "qbitarray.h"
 #include "qcache.h"
@@ -53,8 +50,11 @@
 #include "qstringmatcher.h"
 #include "qvector.h"
 #include "private/qfunctions_p.h"
+#include "qregexp.h"
 
 #include <limits.h>
+
+#ifndef QT_NO_REGEXP
 
 QT_BEGIN_NAMESPACE
 
@@ -4507,3 +4507,5 @@ QDataStream &operator>>(QDataStream &in, QRegExp &regExp)
 #endif // QT_NO_DATASTREAM
 
 QT_END_NAMESPACE
+
+#endif

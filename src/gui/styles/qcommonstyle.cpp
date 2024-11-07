@@ -5761,6 +5761,7 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
     } // if (QApplication::desktopSettingsAware())
 #endif // Q_WS_MAC
 
+#ifdef QT_UNDERTAKE
     switch (standardIcon) {
 #ifndef QT_NO_IMAGEFORMAT_PNG
      case SP_FileDialogNewFolder:
@@ -5962,6 +5963,7 @@ QIcon QCommonStyle::standardIconImplementation(StandardPixmap standardIcon, cons
         icon.addPixmap(proxy()->standardPixmap(standardIcon, option, widget));
         break;
     }
+#endif
     return icon;
 }
 
