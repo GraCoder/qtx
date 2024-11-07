@@ -1,8 +1,11 @@
 #pragma once
 
 #include <QWidget>
+#include <QtGui/qframeless.h>
 
-class MainDlg : public QWidget{
+typedef QFrameless Base;
+
+class MainDlg : public Base{
   Q_OBJECT
 public:
   MainDlg();

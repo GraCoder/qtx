@@ -485,7 +485,7 @@
 #define QT_NO_WIN_ACTIVEQT
 #endif
 
-// QWizard
+// QFrameless
 #if !defined(QT_NO_WIZARD) && (defined(QT_NO_PROPERTIES))
 #define QT_NO_WIZARD
 #endif

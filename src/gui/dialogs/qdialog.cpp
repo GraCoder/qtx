@@ -536,7 +536,7 @@ int QDialog::exec()
 
 #ifdef Q_OS_SYMBIAN
     if (qobject_cast<QFileDialog *>(this) || qobject_cast<QFontDialog *>(this) ||
-        qobject_cast<QWizard *>(this)) {
+        qobject_cast<QFrameless *>(this)) {
         showSystemDialogFullScreen = true;
     }
 #endif // Q_OS_SYMBIAN

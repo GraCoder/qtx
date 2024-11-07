@@ -64,7 +64,7 @@
 #include "qfile.h"
 #include "qtextstream.h"
 #include "qpixmapcache.h"
-#include "qwizard.h"
+#include "qframeless.h"
 #include "qlistview.h"
 #include <private/qmath_p.h>
 #include <qmath.h>
@@ -1225,11 +1225,6 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
                 ret = '*';
         }
         break;
-#ifndef QT_NO_WIZARD
-    case SH_WizardStyle:
-        ret = QWizard::ModernStyle;
-        break;
-#endif
     case SH_ItemView_ArrowKeysNavigateIntoChildren:
         ret = true;
         break;

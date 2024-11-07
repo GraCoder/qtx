@@ -1844,7 +1844,7 @@ void QStyle::drawItemPixmap(QPainter *painter, const QRect &rect, int alignment,
 
     \value SH_DialogButtonLayout  Controls how buttons are laid out in a QDialogButtonBox, returns a QDialogButtonBox::ButtonLayout enum.
 
-    \value SH_WizardStyle Controls the look and feel of a QWizard. Returns a QWizard::WizardStyle enum.
+    \value SH_FramelessStyle Controls the look and feel of a QFrameless. Returns a QFrameless::FramelessStyle enum.
 
     \value SH_FormLayoutWrapPolicy Provides a default for how rows are wrapped in a QFormLayout. Returns a QFormLayout::RowWrapPolicy enum.
     \value SH_FormLayoutFieldGrowthPolicy Provides a default for how fields can grow in a QFormLayout. Returns a QFormLayout::FieldGrowthPolicy enum.

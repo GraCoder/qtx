@@ -1,0 +1,136 @@
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtGui module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+#ifndef QFRAMELESS_WIN_P_H
+#define QFRAMELESS_WIN_P_H
+
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
+#ifndef QT_NO_STYLE_WINDOWSVISTA
+
+#include <qt_windows.h>
+#include <qobject.h>
+#include <qwidget.h>
+#include <qabstractbutton.h>
+#include <QtGui/private/qwidget_p.h>
+#include <QtGui/private/qstylehelper_p.h>
+
+QT_BEGIN_NAMESPACE
+
+
+class QFrameless;
+
+class QVistaHelper : public QObject
+{
+public:
+    QVistaHelper(QFrameless *frameless);
+    ~QVistaHelper();
+    enum TitleBarChangeType { NormalTitleBar, ExtendedTitleBar };
+    bool setDWMTitleBar(TitleBarChangeType type);
+    void setTitleBarIconAndCaptionVisible(bool visible);
+    void mouseEvent(QEvent *event);
+    bool handleWinEvent(MSG *message, long *result);
+    void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *event);
+    void setWindowPosHack();
+    QColor basicWindowFrameColor();
+    enum VistaState { VistaAero, VistaBasic, Classic, Dirty };
+    static VistaState vistaState();
+    static int titleBarSize() { return frameSize() + captionSize(); }
+    static int topPadding() { // padding under text
+        return int(QStyleHelper::dpiScaled(QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7 ? 4 : 6));
+    }
+    static int topOffset();
+
+private:
+    static HFONT getCaptionFont(HANDLE hTheme);
+    bool drawTitleText(QPainter *painter, const QString &text, const QRect &rect, HDC hdc);
+    static bool drawBlackRect(const QRect &rect, HDC hdc);
+
+    static int frameSize();
+    static int captionSize();
+
+    static int iconSize() { return 16; } // Standard Aero
+    static int glowSize() { return 10; }
+    int leftMargin() { return  QStyleHelper::dpiScaled(0); }
+
+    int titleOffset();
+    bool resolveSymbols();
+    void drawTitleBar(QPainter *painter);
+    void setMouseCursor(QPoint pos);
+    void collapseTopFrameStrut();
+    bool winEvent(MSG *message, long *result);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
+
+    static int instanceCount;
+    static bool is_vista;
+    static VistaState cachedVistaState;
+    static bool isCompositionEnabled();
+    static bool isThemeActive();
+    enum Changes { resizeTop, movePosition, noChange } change;
+    QPoint pressedPos;
+    bool pressed;
+    QRect rtTop;
+    QRect rtTitle;
+    QFrameless *frameless;
+
+    int titleBarOffset;  // Extra spacing above the text
+    int iconSpacing;    // Space between button and icon
+    int textSpacing;    // Space between icon and text
+};
+
+
+QT_END_NAMESPACE
+
+#endif // QT_NO_STYLE_WINDOWSVISTA
+#endif // QFRAMELESS_WIN_P_H

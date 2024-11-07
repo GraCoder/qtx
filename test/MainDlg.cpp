@@ -7,11 +7,16 @@
 #include <tchar.h>
 
 MainDlg::MainDlg()
-  :QWidget(0, Qt::Dialog)
+  : Base(0)
 {
+  setMinimumSize(800, 640);
 
-  setWindowTitle(QString::fromWCharArray(_T("1111")));
   auto layout = new QVBoxLayout(this);
   auto label = new QLabel("zhehutehue");
   layout->addWidget(label);
+  layout->addStretch();
+
+  auto ple = palette();
+  ple.setColor(QPalette::Window, Qt::green);
+  label->setPalette(ple);
 }

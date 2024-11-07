@@ -57,8 +57,8 @@ set(rcc_files
 
 set(CMAKE_AUTOMOC ON)
 
-if(build_shared)
-set(target_flag SHARED)
+if(NOT build_shared)
+  list(APPEND util_files qtmain_win.cpp)
 endif()
 
 add_library(${target_name} ${target_flag} ${rcc_files} ${uifiles}
@@ -72,7 +72,6 @@ add_library(${target_name} ${target_flag} ${rcc_files} ${uifiles}
   ${dialog_files}
   ${math_files}
   ${util_files}
-  qtmain_win.cpp
 )
 
 target_compile_definitions(${target_name} PRIVATE QT_BUILD_GUI_LIB)
@@ -83,7 +82,7 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/moc)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${target_name} PUBLIC QtCore ddraw dwrite)
+target_link_libraries(${target_name} PUBLIC QtCore ddraw dwrite Imm32)
 #target_link_libraries(${target_name} PRIVATE libpng)
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:libpng>)
 
