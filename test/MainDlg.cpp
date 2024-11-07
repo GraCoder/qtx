@@ -11,7 +11,7 @@ MainDlg::MainDlg()
 {
 
   setWindowTitle(QString::fromWCharArray(_T("1111")));
-  //auto layout = new QVBoxLayout(this);
-  //auto label = new QLabel("zhehutehue");
-  //layout->addWidget(label);
+  auto layout = new QVBoxLayout(this);
+  auto label = new QLabel("zhehutehue");
+  layout->addWidget(label);
 }

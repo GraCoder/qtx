@@ -1992,6 +1992,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             if ( QApplication::type() == QApplication::Tty )
                 break;
 
+#ifndef QT_NO_SYSTEMLOCALE
             if (!msg.wParam) {
 #ifdef Q_WS_WINCE
                 // On Windows CE, lParam parameter is a constant, not a char pointer.
@@ -2000,6 +2001,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                 QString area = QString::fromWCharArray((wchar_t*)msg.lParam);
                 if (area == QLatin1String("intl")) {
 #endif
+
                     QLocalePrivate::updateSystemPrivate();
                     if (!widget->testAttribute(Qt::WA_SetLocale))
                         widget->dptr()->setLocale_helper(QLocale(), true);
@@ -2007,6 +2009,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                     QApplication::sendEvent(qApp, &e);
                 }
             }
+#endif
             else if (msg.wParam == SPI_SETICONTITLELOGFONT) {
                 if (QApplication::desktopSettingsAware()) {
                     widget = (QETWidget*)QWidget::find(hwnd);
