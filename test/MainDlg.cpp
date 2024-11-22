@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QTableWidget>
 #include <QTimer>
+#include <QListWidget>
 
 #include <Windows.h>
 #include <tchar.h>
@@ -21,26 +22,40 @@ MainDlg::MainDlg()
 
 #if(1)
   auto bar = new WindowBar;
+  connect(bar, SIGNAL(sigMinWindow()), this, SLOT(showMinimized()));
+  connect(bar, SIGNAL(sigMaxWindow()), this, SLOT(sltShowMaximum()));
+  connect(bar, SIGNAL(sigCloseWindow()), this, SLOT(close()));
+
   setTitleBar(bar);
   layout->addWidget(bar);
   layout->addStretch();
 
   {
-    auto label = new QLabel("ABCDEFGHIJKLMNOPQRST");
+    auto label = new QLabel("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
     auto ft = label->font(); 
     //ft.setPointSizeF(32);
     label->setFont(ft);
     layout->addWidget(label);
-    //layout->addWidget(new QTableWidget);
   }
-
-  connect(bar, SIGNAL(sigMinWindow()), this, SLOT(showMinimized()));
-  connect(bar, SIGNAL(sigMaxWindow()), this, SLOT(sltShowMaximum()));
-  connect(bar, SIGNAL(sigCloseWindow()), this, SLOT(close()));
-
+  {
+    auto label = new QLabel(QString::fromUtf8("历史文件不具有现实意义\n八纮一宇，七生报国\n"));
+    auto ft = label->font(); 
+    ft.setPointSizeF(18);
+    label->setFont(ft);
+    layout->addWidget(label);
+  } 
   //auto ple = palette();
   //ple.setColor(QPalette::Window, Qt::green);
   //setPalette(ple);
+
+  //{
+  //  auto list = new QListWidget;
+  //  QStringList xx; xx << "abac" << "hcrgh" << QString::fromUtf8("真的吗");
+  //  list->addItems(xx);
+  //  layout->addWidget(list);
+  //}
+
+
 #endif
 
   //auto timer = new QTimer();
