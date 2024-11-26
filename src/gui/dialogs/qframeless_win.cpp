@@ -592,7 +592,7 @@ void QFramelessPrivate::paintEvent(QPaintEvent* event)
   QPen pen; pen.setWidth(thick * 2);
   pen.setColor(Qt::black);
 
-  const bool dark = true;
+  const bool dark = false;
   if (q->isActiveWindow()) {
     pen.setColor(dark ? activeDark : activeLight);
   }
@@ -822,9 +822,16 @@ bool QFramelessPrivate::nchitest(MSG* msg, long* result)
     return true;
   }
 
-  if (_titleBar && inTitleBar(msg->hwnd, localPt)) {
-    *result = _titleBar->titlePart(localPt);
-    return true;
+  if (_titleBar) {
+    if (inTitleBar(msg->hwnd, localPt)) {
+      *result = _titleBar->titlePart(localPt);
+      return true;
+    }
+  } else{
+    if(localPt.y() < 20) {
+      *result = HTCAPTION;
+      return true;
+    }
   }
 
   return true;
