@@ -26,9 +26,9 @@ MainDlg::MainDlg()
   connect(bar, SIGNAL(sigMaxWindow()), this, SLOT(sltShowMaximum()));
   connect(bar, SIGNAL(sigCloseWindow()), this, SLOT(close()));
 
-  //setTitleBar(bar);
-  //layout->addWidget(bar);
-  //layout->addStretch();
+  setTitleBar(bar);
+  layout->addWidget(bar);
+  layout->addStretch();
 
   {
     auto label = new QLabel("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");

@@ -184,7 +184,7 @@ static inline constexpr bool isNonClientMessage(const UINT message)
   }
 }
 
-static inline quint32 getWindowFrameBorderThickness(HWND hwnd)
+static inline int getWindowFrameBorderThickness(HWND hwnd)
 {
   UINT result = 0;
   if (SUCCEEDED(pDwmGetWindowAttribute(hwnd, _DWMWA_VISIBLE_FRAME_BORDER_THICKNESS, &result, sizeof(result))))
@@ -193,14 +193,14 @@ static inline quint32 getWindowFrameBorderThickness(HWND hwnd)
   return GetSystemMetricsForDpi(SM_CXBORDER, GetDpiForWindow(hwnd));
 }
 
-static inline quint32 getResizeBorderThickness(HWND hwnd)
+static inline int getResizeBorderThickness(HWND hwnd)
 {
   const quint32 dpi = GetDpiForWindow(hwnd);
   //return GetSystemMetricsForDpi(SM_CXSIZEFRAME, dpi) + GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
   return GetSystemMetricsForDpi(SM_CXSIZEFRAME, dpi);
 }
 
-static inline quint32 getTitleBarHeight(HWND hwnd)
+static inline int getTitleBarHeight(HWND hwnd)
 {
   const quint32 dpi = GetDpiForWindow(hwnd);
   return GetSystemMetricsForDpi(SM_CYCAPTION, dpi) + GetSystemMetricsForDpi(SM_CXSIZEFRAME, dpi) +
@@ -550,7 +550,7 @@ bool QFramelessPrivate::handleWinEvent(MSG* msg, long* result)
   case WM_NCMOUSELEAVE: {
     return ncmouse_leave(msg, result);
   }
-  case WM_SIZE:{
+  case WM_SIZE: {
     break;
   }
   default: {
@@ -586,10 +586,11 @@ void QFramelessPrivate::paintEvent(QPaintEvent* event)
 
   HWND hwnd = (HWND)q->winId();
 
+#if 1
   QPainter painter(q);
 
-  int thick = getWindowFrameBorderThickness(hwnd);
-  QPen pen; pen.setWidth(thick * 2);
+  float thick = getWindowFrameBorderThickness(hwnd);
+  QPen pen; pen.setWidth(thick);
   pen.setColor(Qt::black);
 
   const bool dark = false;
@@ -604,7 +605,9 @@ void QFramelessPrivate::paintEvent(QPaintEvent* event)
   painter.setRenderHint(QPainter::Antialiasing);
 
   painter.setPen(pen);
-  painter.drawLine(QLine{ QPoint{0, 0}, QPoint{q->width(), 0} });
+  painter.drawLine(QLineF(QPointF(0, thick / 2.0), QPointF(q->width(), thick / 2.0)));
+#else
+#endif
 }
 
 void QFramelessPrivate::setTitleBar(QFramelessBar* titleBar)
@@ -884,6 +887,54 @@ bool QFramelessPrivate::ncmouse_leave(MSG* message, long* result)
     return true;
   }
   return false;
+}
+
+//bool forwardObjectEventFilters(QObject* currentFilter, QObject* receiver, QEvent* event)
+//{
+//  // https://github.com/qt/qtbase/blob/e26a87f1ecc40bc8c6aa5b889fce67410a57a702/src/corelib/kernel/qcoreapplication.cpp#L1244
+//  // Send the event through the rest event filters
+//  auto d = QObjectPrivate::get(receiver);
+//  bool findCurrent = false;
+//  if (receiver != QCoreApplication::instance() && d->extraData) {
+//    for (qsizetype i = 0; i < d->extraData->eventFilters.size(); ++i) {
+//      QObject* obj = d->extraData->eventFilters.at(i);
+//      if (!findCurrent) {
+//        if (obj == currentFilter) {
+//          findCurrent = true; // Will start to filter from the next one
+//        }
+//        continue;
+//      }
+//
+//      if (!obj)
+//        continue;
+//      if (QObjectPrivate::get(obj)->threadData != d->threadData) {
+//        qWarning("QCoreApplication: Object event filter cannot be in a different " "thread.");
+//        continue;
+//      }
+//      if (obj->eventFilter(receiver, event))
+//        return true;
+//    }
+//  }
+//  return false;
+//}
+
+void QFramelessPrivate::drawBorder()
+{
+  Q_Q(QFrameless);
+
+  HWND hwnd = (HWND)q->winId();
+  HDC hdc = ::GetDC(hwnd);
+  RECT windowRect{};
+  ::GetClientRect(hwnd, &windowRect);
+  RECT rcTopBorder = {
+      0,
+      0,
+      RECT_WIDTH(windowRect),
+      int(getWindowFrameBorderThickness(hwnd)),
+  };
+  ::FillRect(hdc, &rcTopBorder,
+    reinterpret_cast<HBRUSH>(::GetStockObject(BLACK_BRUSH)));
+  ::ReleaseDC(hwnd, hdc);
 }
 
 QT_END_NAMESPACE

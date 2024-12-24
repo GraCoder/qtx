@@ -109,6 +109,7 @@ private:
   bool ncmouse(MSG* message, long* result);
   bool ncmouse_leave(MSG* message, long* result);
 
+  void drawBorder();
 private:
   enum Changes { resizeTop, movePosition, noChange } change;
   QFramelessBar* _titleBar = nullptr;

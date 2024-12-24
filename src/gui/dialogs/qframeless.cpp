@@ -110,12 +110,17 @@ void QFrameless::setTitleBar(QFramelessBar *titlebar)
 bool QFrameless::event(QEvent *event)
 {
   Q_D(QFrameless);
-  if (event->type() == QEvent::StyleChange) { 
-  }
-  else if (event->type() == QEvent::WinIdChange) {
+  switch (event->type()) {
+  case QEvent::UpdateRequest:
+    //d->drawBorder();
+    break;
+  case QEvent::StyleChange:
+    break;
+  case QEvent::WinIdChange:
     d->initFrame();
-  }
-  else if(event->type() == QEvent::WindowStateChange ){
+    break;
+  case QEvent::WindowStateChange:
+    break;
   }
   return QDialog::event(event);
 }
