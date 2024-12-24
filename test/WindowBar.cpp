@@ -11,10 +11,10 @@ WindowBar::WindowBar()
   setMinimumHeight(80);
   setMinimumWidth(600);
 
-  auto ple = palette();
-  ple.setColor(QPalette::Window, QColor(25, 90, 190));
-  setPalette(ple);
-  setAutoFillBackground(true);
+  //auto ple = palette();
+  //ple.setColor(QPalette::Window, QColor(25, 90, 190));
+  //setPalette(ple);
+  //setAutoFillBackground(true);
 
   auto layout = new QHBoxLayout(this);
   layout->setContentsMargins(0, 0, 0, 0);

@@ -1,8 +1,8 @@
 #include "WindowBtn.h"
 
-#include <cmath>
-#include <algorithm>
 #include <QPainter>
+#include <algorithm>
+#include <cmath>
 
 WindowBtn::WindowBtn(BtnType btnType)
   : _type(btnType)
@@ -11,25 +11,30 @@ WindowBtn::WindowBtn(BtnType btnType)
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
-void WindowBtn::paintEvent(QPaintEvent* ev)
+void WindowBtn::paintEvent(QPaintEvent *ev)
 {
   QPainter painter(this);
-  auto pt = mapFromGlobal(QCursor::pos());
-  if (underMouse())
-  {
-    if (_type == BT_Close)
-      painter.fillRect(rect(), QColor(0xe81123));
-    else
-      painter.fillRect(rect(), QColor(0, 0, 0, 25));
-  }
-  else
-  {
-    painter.fillRect(rect(), QColor(25, 90, 190));
+  if (underMouse()) {
+    if (_type == BT_Close) {
+      if (_pressing)
+        painter.fillRect(rect(), QColor(0xf1707a));
+      else
+        painter.fillRect(rect(), QColor(0xe81123));
+    } else {
+      if (_pressing)
+        painter.fillRect(rect(), QColor(0, 0, 0, 60));
+      else
+        painter.fillRect(rect(), QColor(0, 0, 0, 25));
+    }
   }
 
   QPen pen = painter.pen();
-  pen.setColor(Qt::white);
+  pen.setColor(Qt::black);
+
   if (_type == BT_Close) {
+    if (underMouse()) {
+      pen.setColor(Qt::white);
+    }
     pen.setWidthF(1.25);
     painter.setPen(pen);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -39,14 +44,13 @@ void WindowBtn::paintEvent(QPaintEvent* ev)
     painter.drawLine(QPoint(qRound(xoft), qRound(yoft)), QPoint(qRound(xoft + sz), qRound(yoft + sz)));
     painter.drawLine(QPoint(qRound(xoft), qRound(yoft + sz)), QPointF(qRound(xoft + sz), qRound(yoft)));
     return;
-  }
-  else if(_type == BT_Max) {
+  } else if (_type == BT_Max) {
     pen.setWidthF(1);
     painter.setPen(pen);
-    float sz = std::min(width(), height()) * 0.33;
+    float sz = std::min(width(), height()) * 0.34;
     int xoft = round((width() - sz) / 2.0);
     int yoft = round((height() - sz) / 2.0);
-    if(topLevelWidget()->isMaximized()) {
+    if (topLevelWidget()->isMaximized()) {
       constexpr float f1 = 0.2083333;
       constexpr float f2 = 0.75;
       painter.drawRect(xoft, yoft + sz * f1, f2 * sz, f2 * sz);
@@ -55,12 +59,11 @@ void WindowBtn::paintEvent(QPaintEvent* ev)
       painter.drawLine(f3, yoft - 1, xoft + sz, yoft - 1);
       painter.drawLine(xoft + sz, yoft, xoft + sz, yoft + sz * f2);
       painter.drawLine(xoft + sz, yoft + sz * f2, xoft + f2 * sz, yoft + sz * f2);
-    }
-    else {
+    } else {
       painter.drawRect(xoft, yoft, sz, sz);
     }
     return;
-  }else if(_type == BT_Min){
+  } else if (_type == BT_Min) {
     pen.setWidthF(1);
     painter.setPen(pen);
     int y = height() / 2.0;
@@ -73,24 +76,36 @@ void WindowBtn::paintEvent(QPaintEvent* ev)
   QPushButton::paintEvent(ev);
 }
 
-void WindowBtn::enterEvent(QEvent* ev)
+void WindowBtn::enterEvent(QEvent *ev)
 {
   Base::enterEvent(ev);
   update();
 }
 
-void WindowBtn::leaveEvent(QEvent* ev)
+void WindowBtn::leaveEvent(QEvent *ev)
 {
   Base::leaveEvent(ev);
   update();
 }
 
-void WindowBtn::mouseReleaseEvent(QMouseEvent* ev)
+void WindowBtn::mousePressEvent(QMouseEvent *ev)
+{
+  Base::mousePressEvent(ev);
+  _pressing = true;
+  update();
+}
+
+void WindowBtn::mouseReleaseEvent(QMouseEvent *ev)
 {
   Base::mouseReleaseEvent(ev);
+  _pressing = false;
 
-  auto pt = mapFromGlobal(QCursor::pos());
-  setAttribute(Qt::WA_UnderMouse, geometry().contains(pt));
+  if(topLevelWidget()->isHidden() || topLevelWidget()->isMinimized()) {
+    setAttribute(Qt::WA_UnderMouse, false); 
+  } else {
+    auto pt = mapFromGlobal(QCursor::pos());
+    setAttribute(Qt::WA_UnderMouse, hitButton(pt));
+  }
 
   update();
 }
