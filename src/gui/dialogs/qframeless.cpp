@@ -75,12 +75,12 @@
 
 QT_BEGIN_NAMESPACE
 
-int QFramelessBar::titlePart(const QPoint &pt)
+int QFramelessBar::titlePart(const QPoint& pt)
 {
   return HTCAPTION;
 }
 
-QFrameless::QFrameless(QWidget *parent, Qt::WindowFlags flags)
+QFrameless::QFrameless(QWidget* parent, Qt::WindowFlags flags)
   : QDialog(*new QFramelessPrivate, parent, flags)
 {
   Q_D(QFrameless);
@@ -99,15 +99,15 @@ void QFrameless::setVisible(bool visible)
   QDialog::setVisible(visible);
 }
 
-void QFrameless::setTitleBar(QFramelessBar *titlebar) 
+void QFrameless::setTitleBar(QFramelessBar* titleBar)
 {
   Q_D(QFrameless);
-  
-  titlebar->init();
-  d->setTitleBar(titlebar);
+
+  titleBar->init();
+  d->setTitleBar(titleBar);
 }
 
-bool QFrameless::event(QEvent *event)
+bool QFrameless::event(QEvent* event)
 {
   Q_D(QFrameless);
   switch (event->type()) {
@@ -125,14 +125,14 @@ bool QFrameless::event(QEvent *event)
   return QDialog::event(event);
 }
 
-void QFrameless::resizeEvent(QResizeEvent *event)
+void QFrameless::resizeEvent(QResizeEvent* event)
 {
   Q_D(QFrameless);
   //d->winAgent->resizeEvent(event);
   QDialog::resizeEvent(event);
 }
 
-void QFrameless::paintEvent(QPaintEvent *event)
+void QFrameless::paintEvent(QPaintEvent* event)
 {
   QDialog::paintEvent(event);
 
@@ -141,7 +141,7 @@ void QFrameless::paintEvent(QPaintEvent *event)
   d->paintEvent(event);
 }
 
-bool QFrameless::winEvent(MSG *message, long *result)
+bool QFrameless::winEvent(MSG* message, long* result)
 {
   Q_D(QFrameless);
 

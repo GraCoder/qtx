@@ -12,6 +12,4 @@ public:
   MainDlg();
 
 public slots:
-
-  void sltShowMaximum();
 };

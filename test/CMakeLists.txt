@@ -7,9 +7,6 @@ set(source_files
 	MainDlg.h
 	MainDlg.cpp
 
-	WindowBtn.h
-	WindowBtn.cpp
-
 	WindowBar.h
 	WindowBar.cpp
 )

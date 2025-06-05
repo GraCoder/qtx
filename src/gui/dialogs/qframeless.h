@@ -70,7 +70,7 @@ public:
 
   void setVisible(bool visible);
 
-  void setTitleBar(QFramelessBar *titlebar);
+  void setTitleBar(QFramelessBar *titleBar);
 
 protected:
   bool event(QEvent* event);
