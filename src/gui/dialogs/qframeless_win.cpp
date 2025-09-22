@@ -39,6 +39,7 @@
 **
 ****************************************************************************/
 
+#include <qglobal.h>
 #include "qapplication.h"
 #include "qframeless.h"
 #include "qframeless_win_p.h"
@@ -187,8 +188,10 @@ static inline constexpr bool isNonClientMessage(const UINT message)
 static inline int getWindowFrameBorderThickness(HWND hwnd)
 {
   UINT result = 0;
-  if (SUCCEEDED(pDwmGetWindowAttribute(hwnd, _DWMWA_VISIBLE_FRAME_BORDER_THICKNESS, &result, sizeof(result))))
-    return result;
+  if (QSysInfo::WindowsVersion >= QSysInfo::WV_11_0) {
+    if (SUCCEEDED(pDwmGetWindowAttribute(hwnd, _DWMWA_VISIBLE_FRAME_BORDER_THICKNESS, &result, sizeof(result))))
+      return result;
+  }
 
   return GetSystemMetricsForDpi(SM_CXBORDER, GetDpiForWindow(hwnd));
 }

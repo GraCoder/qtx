@@ -71,9 +71,6 @@ public:
     virtual bool processEvents(QEventLoop::ProcessEventsFlags flags) = 0;
     virtual bool hasPendingEvents() = 0;
 
-    virtual void registerSocketNotifier(QSocketNotifier *notifier) = 0;
-    virtual void unregisterSocketNotifier(QSocketNotifier *notifier) = 0;
-
     int registerTimer(int interval, QObject *object);
     virtual void registerTimer(int timerId, int interval, QObject *object) = 0;
     virtual bool unregisterTimer(int timerId) = 0;

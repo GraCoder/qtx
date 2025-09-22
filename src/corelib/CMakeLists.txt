@@ -29,7 +29,7 @@ set(CMAKE_AUTOMOC ON)
 #qt4_wrap_cpp(mocfiles ${moc_h})
 #source_group("moc" FILES ${mocfiles})
 
-add_library(${target_name} STATIC ${mocfiles} ${kernel_files} ${global_files} ${tools_files}
+add_library(${target_name} ${mocfiles} ${kernel_files} ${global_files} ${tools_files}
 	${io_files}
 	${thread_files} 
 	${codecs_files}

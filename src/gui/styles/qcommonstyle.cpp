@@ -2967,6 +2967,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
 
             QRect iconRect;
+#ifndef QT_NO_DOCKWIDGET
             if (const QDockWidget *dw = qobject_cast<const QDockWidget*>(widget)) {
                 QIcon icon;
                 if (dw->isFloating())
@@ -2981,6 +2982,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                     left = iconRect.right() + margin;
                 }
             }
+#endif
             if (sr == SE_DockWidgetIcon) {
                 r = iconRect;
                 break;

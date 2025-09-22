@@ -79,9 +79,6 @@ public:
     bool QT_ENSURE_STACK_ALIGNED_FOR_SSE processEvents(QEventLoop::ProcessEventsFlags flags);
     bool hasPendingEvents();
 
-    void registerSocketNotifier(QSocketNotifier *notifier);
-    void unregisterSocketNotifier(QSocketNotifier *notifier);
-
     void registerTimer(int timerId, int interval, QObject *object);
     bool unregisterTimer(int timerId);
     bool unregisterTimers(QObject *object);

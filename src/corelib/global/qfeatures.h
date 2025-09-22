@@ -83,7 +83,7 @@
 //#define QT_NO_FILESYSTEMITERATOR
 
 // QFileSystemWatcher
-//#define QT_NO_FILESYSTEMWATCHER
+#define QT_NO_FILESYSTEMWATCHER
 
 // Freetype Font Engine
 //#define QT_NO_FREETYPE
@@ -299,7 +299,7 @@
 //#define QT_NO_UDPSOCKET
 
 // QUndoCommand
-//#define QT_NO_UNDOCOMMAND
+#define QT_NO_UNDOCOMMAND
 
 // QUrlInfo
 //#define QT_NO_URLINFO
@@ -314,6 +314,7 @@
 #if !defined(QT_NO_ANIMATION) && (defined(QT_NO_PROPERTIES))
 #define QT_NO_ANIMATION
 #endif
+#define QT_NO_ANIMATION
 
 // QButtonGroup
 #if !defined(QT_NO_BUTTONGROUP) && (defined(QT_NO_GROUPBOX))
@@ -704,6 +705,7 @@
 #if !defined(QT_NO_MAINWINDOW) && (defined(QT_NO_MENU) || defined(QT_NO_RESIZEHANDLER) || defined(QT_NO_TOOLBUTTON))
 #define QT_NO_MAINWINDOW
 #endif
+#define QT_NO_MAINWINDOW
 
 // QAbstractProxyModel
 #if !defined(QT_NO_PROXYMODEL) && (defined(QT_NO_ITEMVIEWS))
@@ -814,6 +816,7 @@
 #if !defined(QT_NO_UNDOVIEW) && (defined(QT_NO_UNDOSTACK) || defined(QT_NO_LISTVIEW))
 #define QT_NO_UNDOVIEW
 #endif
+#define QT_NO_UNDOVIEW
 
 // QCompleter
 #if !defined(QT_NO_FSCOMPLETER) && (defined(QT_NO_FILESYSTEMMODEL) || defined(QT_NO_COMPLETER))

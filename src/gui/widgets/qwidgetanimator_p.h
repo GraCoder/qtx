@@ -64,6 +64,8 @@ class QMainWindowLayout;
 class QPropertyAnimation;
 class QRect;
 
+#ifndef QT_NO_ANIMATION
+
 class QWidgetAnimator : public QObject
 {
     Q_OBJECT
@@ -74,16 +76,16 @@ public:
 
     void abort(QWidget *widget);
 
-#ifndef QT_NO_ANIMATION
 private Q_SLOTS:
     void animationFinished();
-#endif
 
 private:
     typedef QMap<QWidget*, QPointer<QPropertyAnimation> > AnimationMap;
     AnimationMap m_animation_map;
     QMainWindowLayout *m_mainWindowLayout;
 };
+
+#endif
 
 QT_END_NAMESPACE
 

@@ -1322,6 +1322,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
     XPThemeData theme(widget, painter, QLatin1String("MENU"), MENU_BARBACKGROUND, stateId, option->rect);
     d->drawBackground(theme);
   } break;
+#ifndef QT_NO_TOOLBAR
   case CE_ToolBar:
     if (const QStyleOptionToolBar *toolbar = qstyleoption_cast<const QStyleOptionToolBar *>(option)) {
       QPalette pal = option->palette;
@@ -1331,6 +1332,8 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
       QWindowsStyle::drawControl(element, &copyOpt, painter, widget);
     }
     break;
+#endif
+#ifndef QT_NO_DOCKWIDGET
   case CE_DockWidgetTitle:
     if (const QDockWidget *dockWidget = qobject_cast<const QDockWidget *>(widget)) {
       QRect rect = option->rect;
@@ -1397,6 +1400,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
       }
       break;
     }
+#endif
 #ifndef QT_NO_ITEMVIEWS
   case CE_ItemViewItem: {
     const QStyleOptionViewItemV4 *vopt;

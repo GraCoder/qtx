@@ -45,7 +45,6 @@
 #ifndef QT_NO_ANIMATION
 #include <QtCore/qpropertyanimation.h>
 #include "qwidgetanimator_p.h"
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -119,3 +118,5 @@ bool QWidgetAnimator::animating() const
 }
 
 QT_END_NAMESPACE
+
+#endif
