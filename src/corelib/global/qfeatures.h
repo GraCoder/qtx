@@ -83,7 +83,7 @@
 //#define QT_NO_FILESYSTEMITERATOR
 
 // QFileSystemWatcher
-#define QT_NO_FILESYSTEMWATCHER
+//#define QT_NO_FILESYSTEMWATCHER
 
 // Freetype Font Engine
 //#define QT_NO_FREETYPE

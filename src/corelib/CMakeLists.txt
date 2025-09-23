@@ -29,12 +29,16 @@ set(CMAKE_AUTOMOC ON)
 #qt4_wrap_cpp(mocfiles ${moc_h})
 #source_group("moc" FILES ${mocfiles})
 
-add_library(${target_name} ${mocfiles} ${kernel_files} ${global_files} ${tools_files}
+add_library(${target_name} ${shared} ${mocfiles} ${kernel_files} ${global_files} ${tools_files}
 	${io_files}
 	${thread_files} 
 	${codecs_files}
   ${plugin_files}
 )
+
+if(QT_SHARED)
+target_compile_definitions(${target_name} PRIVATE QT_MAKEDLL)
+endif()
 
 target_compile_definitions(${target_name} PUBLIC QT_HAVE_SSE QT_HAVE_SSE2 QT_HAVE_SSE3 QT_HAVE_SSSE3 QT_HAVE_SSE4_1 QT_HAVE_SSE4_2)
 
@@ -44,7 +48,7 @@ target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtC
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/moc)
 
-target_link_libraries(${target_name} PRIVATE Ws2_32)
+#target_link_libraries(${target_name} PRIVATE Ws2_32)
 
 #target_link_libraries(${target_name} PRIVATE harfbuzz zlib)
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:harfbuzz> $<TARGET_OBJECTS:zlib>)

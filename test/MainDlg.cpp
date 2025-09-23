@@ -83,4 +83,7 @@ MainDlg::MainDlg()
     // connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     // timer->start();
   }
+
+  auto btn = new QPushButton;
+  layout->addWidget(btn);
 }
