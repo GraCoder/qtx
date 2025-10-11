@@ -20,6 +20,9 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${thread_files})
 file(GLOB codecs_files codecs/*.cpp codecs/*.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${codecs_files})
 
+file(GLOB xml_files xml/*.cpp xml/*.h)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${xml_files})
+
 file(GLOB plugin_files plugin/*.cpp plugin/*.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${plugin_files})
 
@@ -33,6 +36,7 @@ add_library(${target_name} ${shared} ${mocfiles} ${kernel_files} ${global_files}
 	${io_files}
 	${thread_files} 
 	${codecs_files}
+	${xml_files}
   ${plugin_files}
 )
 

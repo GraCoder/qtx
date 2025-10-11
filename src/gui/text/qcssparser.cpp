@@ -54,7 +54,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#include "qcssscanner.cpp"
+#include "qcssscanner.cxx"
 
 using namespace QCss;
 

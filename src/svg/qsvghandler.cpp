@@ -3858,6 +3858,7 @@ QSvgStyleSelector * QSvgHandler::selector() const
 
 bool QSvgHandler::processingInstruction(const QString &target, const QString &data)
 {
+#if 0
     if (target == QLatin1String("xml-stylesheet")) {
         QRegExp rx(QLatin1String("type=\\\"(.+)\\\""));
         rx.setMinimal(true);
@@ -3894,7 +3895,7 @@ bool QSvgHandler::processingInstruction(const QString &target, const QString &da
 
         }
     }
-
+#endif
     return true;
 }
 

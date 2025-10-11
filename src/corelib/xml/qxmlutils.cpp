@@ -39,7 +39,6 @@
 **
 ****************************************************************************/
 
-#include <qregexp.h>
 #include <qstring.h>
 
 #include "qxmlutils_p.h"
@@ -230,16 +229,42 @@ bool QXmlUtils::isBaseChar(const QChar c)
     \sa \l {http://www.w3.org/TR/REC-xml/#NT-EncName}
            {Extensible Markup Language (XML) 1.0 (Fourth Edition), [81] EncName}
  */
+
+[[nodiscard]] constexpr inline bool isAsciiDigit(char32_t c) noexcept
+{
+  return c >= '0' && c <= '9';
+}
+
+constexpr inline bool isAsciiUpper(char32_t c) noexcept
+{
+  return c >= 'A' && c <= 'Z';
+}
+
+constexpr inline bool isAsciiLower(char32_t c) noexcept
+{
+  return c >= 'a' && c <= 'z';
+}
+
+constexpr inline bool isAsciiLetterOrNumber(char32_t c) noexcept
+{
+  return isAsciiDigit(c) || isAsciiLower(c) || isAsciiUpper(c);
+}
+
 bool QXmlUtils::isEncName(const QString &encName)
 {
-    /* Right, we here have a dependency on QRegExp. Writing a manual parser to
-     * replace that regexp is probably a 70 lines so I prioritize this to when
-     * the dependency is considered alarming, or when the rest of the bugs
-     * are fixed. */
-    const QRegExp encNameRegExp(QLatin1String("[A-Za-z][A-Za-z0-9._\\-]*"));
-    Q_ASSERT(encNameRegExp.isValid());
-
-    return encNameRegExp.exactMatch(encName);
+  // Valid encoding names are given by "[A-Za-z][A-Za-z0-9._\\-]*"
+  if (encName.isEmpty())
+    return false;
+  const auto first = encName.at(0).unicode();
+  if (!(isAsciiLower(first) || isAsciiUpper(first)))
+    return false;
+  for (QChar ch : encName.mid(1)) {
+    const auto cp = ch.unicode();
+    if (isAsciiLetterOrNumber(cp) || cp == '.' || cp == '_' || cp == '-')
+      continue;
+    return false;
+  }
+  return true;
 }
 
 /*!

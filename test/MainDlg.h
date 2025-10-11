@@ -12,4 +12,5 @@ public:
   MainDlg();
 
 public slots:
+  void sltTest1();
 };

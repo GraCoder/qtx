@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QMenuBar>
 #include <QMenu>
+#include <QFileDialog>
 
 #include <Windows.h>
 #include <tchar.h>
@@ -86,4 +87,11 @@ MainDlg::MainDlg()
 
   auto btn = new QPushButton;
   layout->addWidget(btn);
+
+  connect(btn, SIGNAL(clicked()), this, SLOT(sltTest1()));
+}
+
+void MainDlg::sltTest1() 
+{
+  auto f = QFileDialog::getSaveFileName(this, "save as", ".", "*.*");
 }
