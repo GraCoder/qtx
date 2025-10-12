@@ -3,7 +3,7 @@
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
-** This file is part of the QtCore module of the Qt Toolkit.
+** This file is part of the plugins of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,45 +39,39 @@
 **
 ****************************************************************************/
 
-#ifndef QPLUGINLOADER_H
-#define QPLUGINLOADER_H
+#ifndef QSVGIOHANDLER_H
+#define QSVGIOHANDLER_H
 
-#include <QtCore/qlibrary.h>
+#include <QtGui/qimageiohandler.h>
 
-
-QT_BEGIN_HEADER
+#ifndef QT_NO_SVGRENDERER
 
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(Core)
+class QImage;
+class QByteArray;
+class QIODevice;
+class QVariant;
+class QSvgIOHandlerPrivate;
 
-class QLibraryPrivate;
-
-class Q_CORE_EXPORT QPluginLoader : public QObject
+class QSvgIOHandler : public QImageIOHandler
 {
-    //Q_OBJECT
-    Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-    Q_PROPERTY(QLibrary::LoadHints loadHints READ loadHints WRITE setLoadHints)
 public:
-    explicit QPluginLoader(QObject *parent = 0);
-    explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
-    ~QPluginLoader();
-
-    QObject *instance();
-
-    static QObjectList staticInstances();
-
-    void setFileName(const QString &fileName);
-    QString fileName() const;
-
-    QString errorString() const;
+    QSvgIOHandler();
+    ~QSvgIOHandler();
+    virtual bool canRead() const;
+    virtual QByteArray name() const;
+    virtual bool read(QImage *image);
+    static bool canRead(QIODevice *device);
+    virtual QVariant option(ImageOption option) const;
+    virtual void setOption(ImageOption option, const QVariant & value);
+    virtual bool supportsOption(ImageOption option) const;
 
 private:
-    Q_DISABLE_COPY(QPluginLoader)
+    QSvgIOHandlerPrivate *d;
 };
 
 QT_END_NAMESPACE
 
-QT_END_HEADER
-
-#endif //QPLUGINLOADER_H
+#endif // QT_NO_SVGRENDERER
+#endif // QSVGIOHANDLER_H

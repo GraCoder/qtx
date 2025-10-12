@@ -41,15 +41,13 @@
 
 #include "qfactoryloader_p.h"
 
-#ifndef QT_NO_LIBRARY
 #include "qfactoryinterface.h"
 #include "qmap.h"
 #include <qdir.h>
-#include <qsettings.h>
 #include <qdebug.h>
 #include "qmutex.h"
-//#include "qplugin.h"
-//#include "qpluginloader.h"
+#include "qplugin.h"
+#include "qpluginloader.h"
 #include "qlibraryinfo.h"
 #include "private/qobject_p.h"
 #include "private/qcoreapplication_p.h"
@@ -101,8 +99,6 @@ public:
 
 QFactoryLoaderPrivate::~QFactoryLoaderPrivate()
 {
-    for (int i = 0; i < libraryList.count(); ++i)
-        libraryList.at(i)->release();
 }
 
 QFactoryLoader::QFactoryLoader(const char *iid,
@@ -126,7 +122,7 @@ QFactoryLoader::QFactoryLoader(const char *iid,
 #endif
 }
 
-
+#ifndef QT_NO_SETTINGS
 void QFactoryLoader::updateDir(const QString &pluginDir, QSettings& settings)
 {
     Q_D(QFactoryLoader);
@@ -222,6 +218,8 @@ void QFactoryLoader::updateDir(const QString &pluginDir, QSettings& settings)
     }
 }
 
+#endif
+
 void QFactoryLoader::update()
 {
 #ifdef QT_SHARED
@@ -238,10 +236,7 @@ void QFactoryLoader::update()
     }
 #else
     Q_D(QFactoryLoader);
-    if (qt_debug_component()) {
-        qDebug() << "QFactoryLoader::QFactoryLoader() ignoring" << d->iid
-                 << "since plugins are disabled in static builds";
-    }
+    qDebug() << "QFactoryLoader::QFactoryLoader() ignoring" << d->iid << "since plugins are disabled in static builds";
 #endif
 }
 
@@ -256,11 +251,11 @@ QStringList QFactoryLoader::keys() const
     Q_D(const QFactoryLoader);
     QMutexLocker locker(&d->mutex);
     QStringList keys = d->keyList;
-    //QObjectList instances = QPluginLoader::staticInstances();
-    //for (int i = 0; i < instances.count(); ++i)
-    //    if (QFactoryInterface *factory = qobject_cast<QFactoryInterface*>(instances.at(i)))
-    //        if (instances.at(i)->qt_metacast(d->iid))
-    //            keys += factory->keys();
+    QObjectList instances = QPluginLoader::staticInstances();
+    for (int i = 0; i < instances.count(); ++i)
+        if (QFactoryInterface *factory = qobject_cast<QFactoryInterface*>(instances.at(i)))
+            if (instances.at(i)->qt_metacast(d->iid))
+                keys += factory->keys();
     return keys;
 }
 
@@ -268,22 +263,11 @@ QObject *QFactoryLoader::instance(const QString &key) const
 {
     Q_D(const QFactoryLoader);
     QMutexLocker locker(&d->mutex);
-    //QObjectList instances = QPluginLoader::staticInstances();
-    //for (int i = 0; i < instances.count(); ++i)
-    //    if (QFactoryInterface *factory = qobject_cast<QFactoryInterface*>(instances.at(i)))
-    //        if (instances.at(i)->qt_metacast(d->iid) && factory->keys().contains(key, Qt::CaseInsensitive))
-    //            return instances.at(i);
-
-    QString lowered = d->cs ? key : key.toLower();
-    if (QLibraryPrivate* library = d->keyMap.value(lowered)) {
-        if (library->instance || library->loadPlugin()) {
-            if (QObject *obj = library->instance()) {
-                if (obj && !obj->parent())
-                    obj->moveToThread(QCoreApplicationPrivate::mainThread());
-                return obj;
-            }
-        }
-    }
+    QObjectList instances = QPluginLoader::staticInstances();
+    for (int i = 0; i < instances.count(); ++i)
+        if (QFactoryInterface *factory = qobject_cast<QFactoryInterface*>(instances.at(i)))
+            if (instances.at(i)->qt_metacast(d->iid) && factory->keys().contains(key, Qt::CaseInsensitive))
+                return instances.at(i);
     return 0;
 }
 
@@ -357,4 +341,3 @@ void QSymbianSystemPluginWatcher::handlePathChanged(QNotifyChangeEvent *e)
 
 QT_END_NAMESPACE
 
-#endif // QT_NO_LIBRARY

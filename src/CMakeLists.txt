@@ -23,3 +23,5 @@ add_subdirectory(corelib)
 add_subdirectory(gui)
 add_subdirectory(winmain)
 add_subdirectory(svg)
+
+add_subdirectory(plugins)

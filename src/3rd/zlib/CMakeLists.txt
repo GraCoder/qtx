@@ -3,10 +3,6 @@ set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 project(zlib C)
 
-if(NOT DEFINED build_shared)
-    option(build_shared "Build a shared library form of zlib" ON)
-endif()
-
 include(CheckTypeSize)
 include(CheckFunctionExists)
 include(CheckIncludeFile)
@@ -144,14 +140,6 @@ if(NOT CYGWIN)
     # This has no effect with MSVC, on that platform the version info for
     # the DLL comes from the resource file win32/zlib1.rc
     set_target_properties(zlib PROPERTIES VERSION ${ZLIB_FULL_VERSION})
-endif()
-
-if(UNIX)
-    # On unix-like platforms the library is almost always called libz
-   set_target_properties(zlib PROPERTIES OUTPUT_NAME z)
-elseif(build_shared AND WIN32)
-    # Creates zlib1.dll when building shared library version
-    set_target_properties(zlib PROPERTIES SUFFIX "1.dll")
 endif()
 
 #============================================================================

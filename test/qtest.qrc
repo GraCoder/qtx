@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/qtest">
+        <file>INTC.svg</file>
+    </qresource>
+</RCC>

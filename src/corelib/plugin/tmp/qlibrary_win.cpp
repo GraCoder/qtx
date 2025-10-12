@@ -47,10 +47,10 @@
 #include "qdir.h"
 #include <private/qfilesystementry_p.h>
 
-//#if defined(QT_NO_LIBRARY) && defined(Q_OS_WIN)
+#if defined(QT_NO_LIBRARY) && defined(Q_OS_WIN)
 //#undef QT_NO_LIBRARY
-//#pragma message("QT_NO_LIBRARY is not supported on Windows")
-//#endif
+#pragma message("QT_NO_LIBRARY is not supported on Windows")
+#endif
 
 #include "qt_windows.h"
 

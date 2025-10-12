@@ -182,7 +182,7 @@
 #define QT_NO_DIRECTWRITE
 
 #define QT_NO_GLIB
-#define QT_NO_LIBRARY
+//#define QT_NO_LIBRARY
 #define QT_NO_FONTDIALOG
 #define QT_NO_FONTCOMBOBOX
 #define QT_NO_GRAPHICSVIEW

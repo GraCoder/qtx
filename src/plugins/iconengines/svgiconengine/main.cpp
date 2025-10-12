@@ -3,7 +3,7 @@
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
-** This file is part of the QtCore module of the Qt Toolkit.
+** This file is part of the plugins of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,45 +39,46 @@
 **
 ****************************************************************************/
 
-#ifndef QPLUGINLOADER_H
-#define QPLUGINLOADER_H
+#include <qiconengineplugin.h>
+#include <qstringlist.h>
 
-#include <QtCore/qlibrary.h>
+#if !defined(QT_NO_IMAGEFORMATPLUGIN) && !defined(QT_NO_SVG)
 
+#include "qsvgiconengine.h"
 
-QT_BEGIN_HEADER
+#include <qiodevice.h>
+#include <qbytearray.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(Core)
-
-class QLibraryPrivate;
-
-class Q_CORE_EXPORT QPluginLoader : public QObject
+class QSvgIconPlugin : public QIconEnginePluginV2
 {
-    //Q_OBJECT
-    Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-    Q_PROPERTY(QLibrary::LoadHints loadHints READ loadHints WRITE setLoadHints)
 public:
-    explicit QPluginLoader(QObject *parent = 0);
-    explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
-    ~QPluginLoader();
-
-    QObject *instance();
-
-    static QObjectList staticInstances();
-
-    void setFileName(const QString &fileName);
-    QString fileName() const;
-
-    QString errorString() const;
-
-private:
-    Q_DISABLE_COPY(QPluginLoader)
+    QStringList keys() const;
+    QIconEngineV2 *create(const QString &filename = QString());
 };
+
+QStringList QSvgIconPlugin::keys() const
+{
+    QStringList keys(QLatin1String("svg"));
+#ifndef QT_NO_COMPRESS
+    keys << QLatin1String("svgz") << QLatin1String("svg.gz");
+#endif
+    return keys;
+}
+
+QIconEngineV2 *QSvgIconPlugin::create(const QString &file)
+{
+    QSvgIconEngine *engine = new QSvgIconEngine;
+    if (!file.isNull())
+        engine->addFile(file, QSize(), QIcon::Normal, QIcon::Off);
+    return engine;
+}
+
+Q_EXPORT_STATIC_PLUGIN(QSvgIconPlugin)
+Q_EXPORT_PLUGIN2(qsvgicon, QSvgIconPlugin)
 
 QT_END_NAMESPACE
 
-QT_END_HEADER
-
-#endif //QPLUGINLOADER_H
+#endif // !QT_NO_IMAGEFORMATPLUGIN

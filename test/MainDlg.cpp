@@ -8,6 +8,8 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QFileDialog>
+#include <QToolButton>
+#include <QPainter>
 
 #include <Windows.h>
 #include <tchar.h>
@@ -85,10 +87,27 @@ MainDlg::MainDlg()
     // timer->start();
   }
 
+  auto hlayout = new QHBoxLayout;
+  layout->addLayout(hlayout);
+
   auto btn = new QPushButton;
-  layout->addWidget(btn);
+  QIcon(":/qtest/INTC.svg").pixmap(300, 400);
+  btn->setIcon(QIcon(":/qtest/INTC.svg"));
+  hlayout->addWidget(btn);
+
+  auto btn1 = new QToolButton;
+  btn1->setIcon(QIcon(":/qtest/INTC.svg"));
+  hlayout->addWidget(btn1);
 
   connect(btn, SIGNAL(clicked()), this, SLOT(sltTest1()));
+}
+
+void MainDlg::paintEvent(QPaintEvent *event) 
+{
+  Base::paintEvent(event);
+  QPainter painter(this);
+  QIcon icon(":/qtest/INTC.svg");
+  icon.paint(&painter, rect());
 }
 
 void MainDlg::sltTest1() 

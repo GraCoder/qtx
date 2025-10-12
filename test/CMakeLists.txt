@@ -13,14 +13,12 @@ set(source_files
 
 set(CMAKE_AUTOMOC ON)
 
-add_executable(${target_name} ${source_files})
+qt4_add_resources(qrcfiles qtest.qrc)
 
-if(QT_SHARED)
-target_compile_definitions(${target_name} PRIVATE QT_DLL)
-endif()
+add_executable(${target_name} ${source_files} ${qrcfiles})
 
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries(${target_name} PRIVATE QtCore QtGui qtmain)
+target_link_libraries(${target_name} PRIVATE QtCore QtGui QtSvg qtmain qsvg qsvgicon)
 
 set_target_properties(${target_name} PROPERTIES FOLDER "test")

@@ -3,10 +3,15 @@
 #include <QtGui/QApplication>
 #include <QtCore/qcoreapplication.h>
 
+#include <qplugin.h>
+
 #include "MainDlg.h"
 
 int main(int argc, char **argv) 
 {
+  //Q_IMPORT_PLUGIN(QSvgPlugin);
+  Q_IMPORT_PLUGIN(QSvgIconPlugin);
+
   QApplication app(argc, argv);
 
   auto ft = QApplication::font();

@@ -53,9 +53,23 @@
 # include "private/qcore_symbian_p.h"
 #endif
 
-#ifndef QT_NO_LIBRARY
 
 QT_BEGIN_NAMESPACE
+
+typedef QList<QtPluginInstanceFunction> StaticInstanceFunctionList;
+Q_GLOBAL_STATIC(StaticInstanceFunctionList, staticInstanceFunctionList)
+
+/*!
+    \relates QPluginLoader
+    \since 4.4
+
+    Registers the given \a function with the plugin loader.
+*/
+void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunction function)
+{
+    staticInstanceFunctionList()->append(function);
+}
+
 
 /*!
     \class QPluginLoader
@@ -139,7 +153,7 @@ QT_BEGIN_NAMESPACE
     Constructs a plugin loader with the given \a parent.
 */
 QPluginLoader::QPluginLoader(QObject *parent)
-    : QObject(parent), d(0), did_load(false)
+    : QObject(parent)
 {
 }
 
@@ -157,7 +171,7 @@ QPluginLoader::QPluginLoader(QObject *parent)
     \sa setFileName()
 */
 QPluginLoader::QPluginLoader(const QString &fileName, QObject *parent)
-    : QObject(parent), d(0), did_load(false)
+    : QObject(parent)
 {
     setFileName(fileName);
 }
@@ -172,8 +186,8 @@ QPluginLoader::QPluginLoader(const QString &fileName, QObject *parent)
 */
 QPluginLoader::~QPluginLoader()
 {
-    if (d)
-        d->release();
+    //if (d)
+    //    d->release();
 }
 
 /*!
@@ -198,71 +212,7 @@ QPluginLoader::~QPluginLoader()
 */
 QObject *QPluginLoader::instance()
 {
-    if (!load())
-        return 0;
-    if (!d->inst && d->instance)
-        d->inst = d->instance();
-    return d->inst.data();
-}
-
-/*!
-    Loads the plugin and returns true if the plugin was loaded
-    successfully; otherwise returns false. Since instance() always
-    calls this function before resolving any symbols it is not
-    necessary to call it explicitly. In some situations you might want
-    the plugin loaded in advance, in which case you would use this
-    function.
-
-    \sa unload()
-*/
-bool QPluginLoader::load()
-{
-    if (!d || d->fileName.isEmpty())
-        return false;
-    if (did_load)
-        return d->pHnd && d->instance;
-    if (!d->isPlugin())
-        return false;
-    did_load = true;
-    return d->loadPlugin();
-}
-
-
-/*!
-    Unloads the plugin and returns true if the plugin could be
-    unloaded; otherwise returns false.
-
-    This happens automatically on application termination, so you
-    shouldn't normally need to call this function.
-
-    If other instances of QPluginLoader are using the same plugin, the
-    call will fail, and unloading will only happen when every instance
-    has called unload().
-
-    Don't try to delete the root component. Instead rely on
-    that unload() will automatically delete it when needed.
-
-    \sa instance(), load()
-*/
-bool QPluginLoader::unload()
-{
-    if (did_load) {
-        did_load = false;
-        return d->unload();
-    }
-    if (d)  // Ouch
-        d->errorString = tr("The plugin was not loaded.");
-    return false;
-}
-
-/*!
-    Returns true if the plugin is loaded; otherwise returns false.
-
-    \sa load()
- */
-bool QPluginLoader::isLoaded() const
-{
-    return d && d->pHnd && d->instance;
+  return 0;
 }
 
 /*!
@@ -342,18 +292,13 @@ void QPluginLoader::setFileName(const QString &fileName)
     if (fn.isEmpty())
         d->errorString = QLibrary::tr("The shared library was not found.");
 #else
-    if (qt_debug_component()) {
-        qWarning("Cannot load %s into a statically linked Qt library.",
-            (const char*)QFile::encodeName(fileName));
-    }
+    qWarning("Cannot load %s into a statically linked Qt library.", (const char*)QFile::encodeName(fileName));
     Q_UNUSED(fileName);
 #endif
 }
 
 QString QPluginLoader::fileName() const
 {
-    if (d)
-        return d->fileName;
     return QString();
 }
 
@@ -364,54 +309,7 @@ QString QPluginLoader::fileName() const
 */
 QString QPluginLoader::errorString() const
 {
-    return (!d || d->errorString.isEmpty()) ? tr("Unknown error") : d->errorString;
-}
-
-typedef QList<QtPluginInstanceFunction> StaticInstanceFunctionList;
-Q_GLOBAL_STATIC(StaticInstanceFunctionList, staticInstanceFunctionList)
-
-/*! \since 4.4
-
-    \property QPluginLoader::loadHints
-    \brief Give the load() function some hints on how it should behave.
-
-    You can give hints on how the symbols in the plugin are
-    resolved. By default, none of the hints are set.
-
-    See the documentation of QLibrary::loadHints for a complete
-    description of how this property works.
-
-    \sa QLibrary::loadHints
-*/
-
-void QPluginLoader::setLoadHints(QLibrary::LoadHints loadHints)
-{
-    if (!d) {
-        d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
-        d->errorString.clear();
-    }
-    d->loadHints = loadHints;
-}
-
-QLibrary::LoadHints QPluginLoader::loadHints() const
-{
-    if (!d) {
-        QPluginLoader *that = const_cast<QPluginLoader *>(this);
-        that->d = QLibraryPrivate::findOrCreate(QString());   // ugly, but we need a d-ptr
-        that->d->errorString.clear();
-    }
-    return d->loadHints;
-}
-
-/*!
-    \relates QPluginLoader
-    \since 4.4
-
-    Registers the given \a function with the plugin loader.
-*/
-void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunction function)
-{
-    staticInstanceFunctionList()->append(function);
+  return QString("");
 }
 
 /*!
@@ -430,5 +328,3 @@ QObjectList QPluginLoader::staticInstances()
 }
 
 QT_END_NAMESPACE
-
-#endif // QT_NO_LIBRARY

@@ -3,7 +3,7 @@
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
-** This file is part of the QtCore module of the Qt Toolkit.
+** This file is part of the plugins of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,45 +39,46 @@
 **
 ****************************************************************************/
 
-#ifndef QPLUGINLOADER_H
-#define QPLUGINLOADER_H
+#ifndef QSVGICONENGINE_H
+#define QSVGICONENGINE_H
 
-#include <QtCore/qlibrary.h>
+#include <QtGui/qiconengine.h>
+#include <QtCore/qshareddata.h>
 
-
-QT_BEGIN_HEADER
+#ifndef QT_NO_SVG
 
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(Core)
+class QSvgIconEnginePrivate;
 
-class QLibraryPrivate;
-
-class Q_CORE_EXPORT QPluginLoader : public QObject
+class QSvgIconEngine : public QIconEngineV2
 {
-    //Q_OBJECT
-    Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-    Q_PROPERTY(QLibrary::LoadHints loadHints READ loadHints WRITE setLoadHints)
 public:
-    explicit QPluginLoader(QObject *parent = 0);
-    explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
-    ~QPluginLoader();
+    QSvgIconEngine();
+    QSvgIconEngine(const QSvgIconEngine &other);
+    ~QSvgIconEngine();
+    void paint(QPainter *painter, const QRect &rect,
+               QIcon::Mode mode, QIcon::State state);
+    QSize actualSize(const QSize &size, QIcon::Mode mode,
+                     QIcon::State state);
+    QPixmap pixmap(const QSize &size, QIcon::Mode mode,
+                   QIcon::State state);
 
-    QObject *instance();
+    void addPixmap(const QPixmap &pixmap, QIcon::Mode mode,
+                   QIcon::State state);
+    void addFile(const QString &fileName, const QSize &size,
+                 QIcon::Mode mode, QIcon::State state);
 
-    static QObjectList staticInstances();
-
-    void setFileName(const QString &fileName);
-    QString fileName() const;
-
-    QString errorString() const;
+    QString key() const;
+    QIconEngineV2 *clone() const;
+    bool read(QDataStream &in);
+    bool write(QDataStream &out) const;
 
 private:
-    Q_DISABLE_COPY(QPluginLoader)
+    QSharedDataPointer<QSvgIconEnginePrivate> d;
 };
 
 QT_END_NAMESPACE
 
-QT_END_HEADER
-
-#endif //QPLUGINLOADER_H
+#endif // QT_NO_SVG
+#endif

@@ -11,6 +11,9 @@ class MainDlg : public Base {
 public:
   MainDlg();
 
+protected:
+  void paintEvent(QPaintEvent *event) override;
+
 public slots:
   void sltTest1();
 };

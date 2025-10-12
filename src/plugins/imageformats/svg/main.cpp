@@ -3,7 +3,7 @@
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
-** This file is part of the QtCore module of the Qt Toolkit.
+** This file is part of the plugins of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,45 +39,56 @@
 **
 ****************************************************************************/
 
-#ifndef QPLUGINLOADER_H
-#define QPLUGINLOADER_H
+#include <qimageiohandler.h>
+#include <qstringlist.h>
 
-#include <QtCore/qlibrary.h>
+#if !defined(QT_NO_IMAGEFORMATPLUGIN) && !defined(QT_NO_SVGRENDERER)
 
+#include "qsvgiohandler.h"
 
-QT_BEGIN_HEADER
+#include <qiodevice.h>
+#include <qbytearray.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(Core)
-
-class QLibraryPrivate;
-
-class Q_CORE_EXPORT QPluginLoader : public QObject
+class QSvgPlugin : public QImageIOPlugin
 {
-    //Q_OBJECT
-    Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-    Q_PROPERTY(QLibrary::LoadHints loadHints READ loadHints WRITE setLoadHints)
 public:
-    explicit QPluginLoader(QObject *parent = 0);
-    explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
-    ~QPluginLoader();
-
-    QObject *instance();
-
-    static QObjectList staticInstances();
-
-    void setFileName(const QString &fileName);
-    QString fileName() const;
-
-    QString errorString() const;
-
-private:
-    Q_DISABLE_COPY(QPluginLoader)
+    QStringList keys() const;
+    Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
+    QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
 };
+
+QStringList QSvgPlugin::keys() const
+{
+    return QStringList() << QLatin1String("svg") << QLatin1String("svgz");
+}
+
+QImageIOPlugin::Capabilities QSvgPlugin::capabilities(QIODevice *device, const QByteArray &format) const
+{
+    if (format == "svg" || format == "svgz")
+        return Capabilities(CanRead);
+    if (!format.isEmpty())
+        return 0;
+
+    Capabilities cap;
+    if (device->isReadable() && QSvgIOHandler::canRead(device))
+        cap |= CanRead;
+    return cap;
+}
+
+QImageIOHandler *QSvgPlugin::create(QIODevice *device, const QByteArray &format) const
+{
+    QSvgIOHandler *hand = new QSvgIOHandler();
+    hand->setDevice(device);
+    hand->setFormat(format);
+    return hand;
+}
+
+Q_EXPORT_STATIC_PLUGIN(QSvgPlugin)
+Q_EXPORT_PLUGIN2(qsvg, QSvgPlugin)
 
 QT_END_NAMESPACE
 
-QT_END_HEADER
-
-#endif //QPLUGINLOADER_H
+#endif // !QT_NO_IMAGEFORMATPLUGIN
