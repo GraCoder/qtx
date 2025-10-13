@@ -174,14 +174,11 @@
 # define QT_NO_XMLPATTERNS
 #endif
 
-#define QT_NO_INOTIFY
-
 //#define QT_NO_DATASTREAM
 //#define QT_NO_COMPRESS
 #define QT_NO_DIRECTDRAW
 #define QT_NO_DIRECTWRITE
 
-#define QT_NO_GLIB
 //#define QT_NO_LIBRARY
 #define QT_NO_FONTDIALOG
 #define QT_NO_FONTCOMBOBOX
@@ -193,14 +190,9 @@
 
 #define QT_NO_COMPLETER
 #define QT_NO_RAWFONT
-#define QT_NO_IMAGEFORMAT_MNG
 #define QT_NO_PRINTER
 //#define QT_NO_CSSPARSER
 
-#define QT_NO_STYLE_MAC
-//#define QT_NO_STYLE_WINDOWSXP
-#define QT_NO_STYLE_PLASTIQUE
-#define QT_NO_STYLE_CLEANLOOKS
 #define QT_NO_WIZARD
 #define QT_NO_WHATSTHIS
 #define QT_NO_STATUSTIP

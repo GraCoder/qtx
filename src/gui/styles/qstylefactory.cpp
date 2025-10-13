@@ -177,15 +177,6 @@ QStyle *QStyleFactory::create(const QString& key)
         ret = new QGtkStyle;
     else
 #endif
-#ifndef QT_NO_STYLE_MAC
-    if (style.startsWith(QLatin1String("macintosh"))) {
-        ret = new QMacStyle;
-#  ifdef Q_WS_MAC
-        if (style == QLatin1String("macintosh"))
-            style += QLatin1String(" (aqua)");
-#  endif
-    } else
-#endif
     { } // Keep these here - they make the #ifdefery above work
 #if !defined(QT_NO_LIBRARY) && !defined(QT_NO_SETTINGS)
     if(!ret) {

@@ -108,6 +108,8 @@
 
 // XBM Image Format
 #define QT_NO_IMAGEFORMAT_XBM
+#define QT_NO_IMAGEFORMAT_MNG
+#define QT_NO_IMAGEFORMAT_XPM
 
 // QImage::createHeuristicMask()
 //#define QT_NO_IMAGE_HEURISTIC_MASK
