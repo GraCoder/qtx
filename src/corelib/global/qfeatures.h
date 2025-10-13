@@ -100,9 +100,6 @@
 // BMP Image Format
 #define QT_NO_IMAGEFORMAT_BMP
 
-// JPEG Image Format
-#define QT_NO_IMAGEFORMAT_JPEG
-
 // PNG Image Format
 //#define QT_NO_IMAGEFORMAT_PNG
 

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/qtest">
         <file>INTC.svg</file>
+        <file>map.jpg</file>
     </qresource>
 </RCC>

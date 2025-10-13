@@ -44,8 +44,13 @@ MainDlg::MainDlg()
     }
 
     layout->addWidget(bar);
-    layout->addStretch();
     setTitleBar(bar);
+
+    {
+      auto label = new QLabel;
+      label->setPixmap(QPixmap(":/qtest/INTC.svg"));
+      layout->addWidget(label, 0, Qt::AlignHCenter);
+    }
 
     {
       auto label = new QLabel("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
@@ -90,9 +95,10 @@ MainDlg::MainDlg()
   auto hlayout = new QHBoxLayout;
   layout->addLayout(hlayout);
 
+  QIcon icon(":/qtest/map.jpg");
   auto btn = new QPushButton;
-  QIcon(":/qtest/INTC.svg").pixmap(300, 400);
-  btn->setIcon(QIcon(":/qtest/INTC.svg"));
+  btn->setIcon(icon);
+  btn->setIconSize(QSize(128, 128));
   hlayout->addWidget(btn);
 
   auto btn1 = new QToolButton;
@@ -105,9 +111,6 @@ MainDlg::MainDlg()
 void MainDlg::paintEvent(QPaintEvent *event) 
 {
   Base::paintEvent(event);
-  QPainter painter(this);
-  QIcon icon(":/qtest/INTC.svg");
-  icon.paint(&painter, rect());
 }
 
 void MainDlg::sltTest1() 
