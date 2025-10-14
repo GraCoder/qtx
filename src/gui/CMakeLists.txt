@@ -77,7 +77,7 @@ target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtG
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${target_name} PUBLIC QtCore Imm32)
+target_link_libraries(${target_name} PUBLIC QtCore Imm32 dwrite)
 #target_link_libraries(${target_name} PRIVATE libpng)
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:libpng>)
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:zlib>)

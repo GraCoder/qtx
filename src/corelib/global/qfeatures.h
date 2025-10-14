@@ -86,7 +86,7 @@
 //#define QT_NO_FILESYSTEMWATCHER
 
 // Freetype Font Engine
-//#define QT_NO_FREETYPE
+#define QT_NO_FREETYPE
 
 // Gesture
 #define QT_NO_GESTURES
@@ -196,7 +196,7 @@
 #define QT_NO_QWS_MULTIPROCESS
 
 // Properties
-#define QT_NO_QWS_PROPERTIES
+//#define QT_NO_QWS_PROPERTIES
 
 // QProxyScreen
 #define QT_NO_QWS_PROXYSCREEN

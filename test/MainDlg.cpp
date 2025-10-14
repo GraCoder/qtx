@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <QToolButton>
 #include <QPainter>
+#include <QLineEdit>
 
 #include <Windows.h>
 #include <tchar.h>
@@ -50,6 +51,11 @@ MainDlg::MainDlg()
       auto label = new QLabel;
       label->setPixmap(QPixmap(":/qtest/INTC.svg"));
       layout->addWidget(label, 0, Qt::AlignHCenter);
+    }
+
+    {
+      auto edit = new QLineEdit; 
+      layout->addWidget(edit);
     }
 
     {

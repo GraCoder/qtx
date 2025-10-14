@@ -72,12 +72,6 @@
 # define QT_NO_FONTCONFIG
 #endif
 
-#if defined(QT_NO_FREETYPE) && defined(QT_FREETYPE)
-# undef QT_NO_FREETYPE
-#elif !defined(QT_NO_FREETYPE)
-# define QT_NO_FREETYPE
-#endif
-
 #if defined(QT_NO_IMAGEFORMAT_TIFF) && defined(QT_IMAGEFORMAT_TIFF)
 # undef QT_NO_IMAGEFORMAT_TIFF
 #elif !defined(QT_NO_IMAGEFORMAT_TIFF)
@@ -174,10 +168,12 @@
 # define QT_NO_XMLPATTERNS
 #endif
 
+#define QT_NO_DIRECTDRAW
+
+//#define QT_NO_DIRECTDRAW
 //#define QT_NO_DATASTREAM
 //#define QT_NO_COMPRESS
-#define QT_NO_DIRECTDRAW
-#define QT_NO_DIRECTWRITE
+//#define QT_NO_DIRECTWRITE
 
 //#define QT_NO_LIBRARY
 #define QT_NO_FONTDIALOG
