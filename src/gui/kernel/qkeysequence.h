@@ -51,7 +51,6 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(Gui)
 
-#ifndef QT_NO_SHORTCUT
 
 /*****************************************************************************
   QKeySequence stream functions
@@ -222,19 +221,8 @@ Q_DECLARE_SHARED(QKeySequence)
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
 #endif
 
-#else
-
-class Q_GUI_EXPORT QKeySequence
-{
-public:
-    QKeySequence() {}
-    QKeySequence(int) {}
-};
-
-#endif // QT_NO_SHORTCUT
-
 QT_END_NAMESPACE
 
 QT_END_HEADER
 
-#endif // QKEYSEQUENCE_H
+#endif

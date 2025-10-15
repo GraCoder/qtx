@@ -129,11 +129,9 @@ static void construct(QVariant::Private *x, const void *copy)
     case QVariant::TextLength:
         v_construct<QTextLength>(x, copy);
         break;
-#ifndef QT_NO_SHORTCUT
     case QVariant::KeySequence:
         v_construct<QKeySequence>(x, copy);
         break;
-#endif
     case QVariant::Pen:
         v_construct<QPen>(x, copy);
         break;

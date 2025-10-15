@@ -138,10 +138,6 @@ QTextControlPrivate::QTextControlPrivate()
 
 bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 {
-#ifdef QT_NO_SHORTCUT
-    Q_UNUSED(e);
-#endif
-
     Q_Q(QTextControl);
     if (cursor.isNull())
         return false;
@@ -154,7 +150,6 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 
     if (false) {
     }
-#ifndef QT_NO_SHORTCUT
     if (e == QKeySequence::MoveToNextChar) {
             op = QTextCursor::Right;
     }
@@ -250,7 +245,6 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
     else if (e == QKeySequence::MoveToEndOfDocument) {
             op = QTextCursor::End;
     }
-#endif // QT_NO_SHORTCUT
     else {
         return false;
     }
@@ -1100,7 +1094,6 @@ void QTextControl::processEvent(QEvent *e, const QMatrix &matrix, QWidget *conte
                             break;
                         }
                     }
-#ifndef QT_NO_SHORTCUT
                 } else if (ke == QKeySequence::Copy
                            || ke == QKeySequence::Paste
                            || ke == QKeySequence::Cut
@@ -1121,7 +1114,6 @@ void QTextControl::processEvent(QEvent *e, const QMatrix &matrix, QWidget *conte
                            || ke == QKeySequence::SelectAll
                           ) {
                     ke->accept();
-#endif
                 }
             }
             break;
@@ -1166,7 +1158,6 @@ void QTextControl::setHtml(const QString &text)
 void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
 {
     Q_Q(QTextControl);
-#ifndef QT_NO_SHORTCUT
     if (e == QKeySequence::SelectAll) {
             e->accept();
             q->selectAll();
@@ -1179,8 +1170,6 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
             return;
     }
 #endif
-#endif // QT_NO_SHORTCUT
-
     if (interactionFlags & Qt::TextSelectableByKeyboard
         && cursorMoveKeyEvent(e))
         goto accept;
@@ -1231,9 +1220,7 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
             localCursor.deletePreviousChar();
         }
         goto accept;
-    }
-#ifndef QT_NO_SHORTCUT
-      else if (e == QKeySequence::InsertParagraphSeparator) {
+    } else if (e == QKeySequence::InsertParagraphSeparator) {
         cursor.insertBlock();
         e->accept();
         goto accept;
@@ -1242,11 +1229,7 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
         e->accept();
         goto accept;
     }
-#endif
-    if (false) {
-    }
-#ifndef QT_NO_SHORTCUT
-    else if (e == QKeySequence::Undo) {
+    if (e == QKeySequence::Undo) {
             q->undo();
     }
     else if (e == QKeySequence::Redo) {
@@ -1286,9 +1269,7 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
         else
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
-    }
-#endif // QT_NO_SHORTCUT
-    else {
+    } else {
         goto process;
     }
     goto accept;

@@ -1480,7 +1480,6 @@ bool QLineControl::processEvent(QEvent* ev)
             processKeyEvent(static_cast<QKeyEvent*>(ev)); break;
         case QEvent::InputMethod:
             processInputMethodEvent(static_cast<QInputMethodEvent*>(ev)); break;
-#ifndef QT_NO_SHORTCUT
         case QEvent::ShortcutOverride:{
             if (isReadOnly())
                 return false;
@@ -1504,8 +1503,7 @@ bool QLineControl::processEvent(QEvent* ev)
                 || ke == QKeySequence::SelectAll
                 || ke == QKeySequence::SelectEndOfDocument) {
                 ke->accept();
-            } else if (ke->modifiers() == Qt::NoModifier || ke->modifiers() == Qt::ShiftModifier
-                       || ke->modifiers() == Qt::KeypadModifier) {
+            } else if (ke->modifiers() == Qt::NoModifier || ke->modifiers() == Qt::ShiftModifier || ke->modifiers() == Qt::KeypadModifier) {
                 if (ke->key() < Qt::Key_Escape) {
                     ke->accept();
                 } else {
@@ -1523,7 +1521,6 @@ bool QLineControl::processEvent(QEvent* ev)
                 }
             }
         }
-#endif
         default:
             return false;
     }
@@ -1670,10 +1667,7 @@ void QLineControl::processKeyEvent(QKeyEvent* event)
     bool unknown = false;
     bool visual = cursorMoveStyle() == Qt::VisualMoveStyle;
 
-    if (false) {
-    }
-#ifndef QT_NO_SHORTCUT
-    else if (event == QKeySequence::Undo) {
+    if (event == QKeySequence::Undo) {
         if (!isReadOnly())
             undo();
     }
@@ -1795,7 +1789,6 @@ void QLineControl::processKeyEvent(QKeyEvent* event)
             del();
         }
     }
-#endif // QT_NO_SHORTCUT
     else {
         bool handled = false;
 #ifdef Q_WS_MAC

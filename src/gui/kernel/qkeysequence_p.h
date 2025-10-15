@@ -57,7 +57,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_SHORTCUT
 struct Q_AUTOTEST_EXPORT QKeyBinding
 {
     QKeySequence::StandardKey standardKey;
@@ -91,7 +90,6 @@ public:
     static const uint numberOfKeyBindings;
 
 };
-#endif // QT_NO_SHORTCUT
 
 QT_END_NAMESPACE
 
