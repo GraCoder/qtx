@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.28)
-
 set(target_name qtest)
 
 set(source_files

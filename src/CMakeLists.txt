@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.28)
-
 include_directories(${CMAKE_SOURCE_DIR}/src/3rd/zlib)
 include_directories(${CMAKE_BINARY_DIR}/src/3rd/zlib)
 
@@ -18,6 +16,8 @@ add_subdirectory(3rd)
 add_definitions(-DQT_NO_DEBUG)
 
 set(CMAKE_DEBUG_POSTFIX "d")
+
+add_subdirectory(tools)
 
 add_subdirectory(corelib)
 add_subdirectory(gui)

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.28)
-
 set(target_name QtCore)
 
 file(GLOB global_files global/*.cpp global/*.h)
@@ -27,10 +25,6 @@ file(GLOB plugin_files plugin/*.cpp plugin/*.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${plugin_files})
 
 set(CMAKE_AUTOMOC ON)
-#set_property(SOURCE kernel/qobject.cpp PROPERTY SKIP_AUTOMOC ON)
-
-#qt4_wrap_cpp(mocfiles ${moc_h})
-#source_group("moc" FILES ${mocfiles})
 
 add_library(${target_name} ${mocfiles} ${kernel_files} ${global_files} ${tools_files}
 	${io_files}
