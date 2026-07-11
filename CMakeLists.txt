@@ -16,8 +16,6 @@ endif()
 
 add_definitions(-DUNICODE -D_UNICODE)
 
-find_package(Qt4 REQUIRED)
-
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

@@ -18,6 +18,7 @@ add_definitions(-DQT_NO_DEBUG)
 set(CMAKE_DEBUG_POSTFIX "d")
 
 add_subdirectory(tools)
+set(moc_exe $<TARGET_FILE:moc>)
 
 add_subdirectory(corelib)
 add_subdirectory(gui)

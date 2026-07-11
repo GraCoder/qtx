@@ -723,25 +723,6 @@ QCoreApplication::QCoreApplication(int &argc, char **argv)
 #endif
 }
 
-QCoreApplication::QCoreApplication(int &argc, char **argv, int _internal)
-: QObject(*new QCoreApplicationPrivate(argc, argv, _internal))
-{
-    init();
-    QCoreApplicationPrivate::eventDispatcher->startingUp();
-#if defined(Q_OS_SYMBIAN)
-#ifndef QT_NO_LIBRARY
-    // Refresh factoryloader, as text codecs are requested during lib path
-    // resolving process and won't be therefore properly loaded.
-    // Unknown if this is symbian specific issue.
-    QFactoryLoader::refreshAll();
-#endif
-#ifndef QT_NO_SYSTEMLOCALE
-    d_func()->symbianInit();
-#endif
-#endif //Q_OS_SYMBIAN
-}
-
-
 // ### move to QCoreApplicationPrivate constructor?
 void QCoreApplication::init()
 {

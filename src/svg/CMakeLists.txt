@@ -3,8 +3,7 @@ set(target_name QtSvg)
 file(GLOB source_files *.cpp *.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${source_files})
 
-set(CMAKE_AUTOMOC ON)
-
+#set(CMAKE_AUTOMOC ON)
 
 add_library(${target_name} STATIC ${source_files})
 

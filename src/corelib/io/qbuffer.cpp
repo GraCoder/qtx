@@ -483,6 +483,6 @@ void QBuffer::disconnectNotify(const char *signal)
 QT_END_NAMESPACE
 
 #ifndef QT_NO_QOBJECT
-# include "moc_qbuffer.cpp"
+  #include "moc_qbuffer.cpp"
 #endif
 

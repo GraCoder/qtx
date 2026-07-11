@@ -1,6 +1,6 @@
 set(target_name qtmain)
 
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 
 add_library(${target_name} STATIC qtmain_win.cpp)
 

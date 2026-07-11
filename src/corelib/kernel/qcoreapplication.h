@@ -84,17 +84,7 @@ public:
 #endif
     };
 
-#if defined(QT_BUILD_CORE_LIB) || defined(qdoc)
     QCoreApplication(int &argc, char **argv); // ### Qt5 remove
-#endif
-#if !defined(qdoc)
-    QCoreApplication(int &argc, char **argv, int
-#if !defined(QT_BUILD_CORE_LIB)
-        = ApplicationFlags
-#endif
-        );
-#endif
-
     ~QCoreApplication();
 
 #ifdef QT_DEPRECATED

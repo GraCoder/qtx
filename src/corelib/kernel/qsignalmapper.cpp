@@ -315,7 +315,7 @@ void QSignalMapper::map(QObject *sender)
 
 QT_END_NAMESPACE
 
-#include "moc_qsignalmapper.cpp"
+//#include "moc_qsignalmapper.cpp"
 
 #endif // QT_NO_SIGNALMAPPER
 

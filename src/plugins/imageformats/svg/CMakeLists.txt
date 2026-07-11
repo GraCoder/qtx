@@ -1,11 +1,9 @@
-cmake_minimum_required(VERSION 3.28)
-
 set(target_name qsvg)
 
 file(GLOB source_files *.cpp *.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${source_files})
 
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 
 add_library(${target_name} STATIC ${source_files})
 

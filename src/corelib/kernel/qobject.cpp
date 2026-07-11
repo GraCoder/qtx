@@ -4314,5 +4314,5 @@ void qDeleteInEventHandler(QObject *o)
 
 QT_END_NAMESPACE
 
-#include "qobject.moc"
 #include "moc_qobject.cpp"
+#include "moc_qnamespace.cpp"
