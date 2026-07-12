@@ -38,7 +38,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
 
 #set(CMAKE_AUTOMOC ON)
 
-add_library(${target_name} ${shared} ${target_flag} ${rcc_files} ${uifiles}
+add_library(${target_name} ${moc_gens}
   ${kernel_files}
   ${style_files}
   ${image_files}
@@ -51,10 +51,133 @@ add_library(${target_name} ${shared} ${target_flag} ${rcc_files} ${uifiles}
   ${util_files}
 )
 
+set(moc_def
+  -DQT_NO_GESTURES
+  -DQT_NO_TOOLTIP
+  -DQT_NO_DRAGANDDROP
+  -DQT_NO_SHORTCUT
+  -DQT_NO_TOOLTIP
+  -DQT_NO_TRANSLATION
+  -DQT_NO_STATUSTIP
+  -DQT_NO_WHATSTHIS
+  -DQT_NO_ACCESSIBILITY
+  -DQT_NO_COMPLETER
+  -DQT_NO_MOVIE
+  -DQT_NO_ANIMATION
+)
+set(moc_dir ${CMAKE_CURRENT_BINARY_DIR}/QtGui.moc/$<CONFIG>)
+set(moc_files
+  dialogs/qdialog.h
+  dialogs/qcolordialog.h
+  dialogs/qframeless.h
+  dialogs/qinputdialog.h
+  dialogs/qfilesystemmodel.h
+  dialogs/qmessagebox.h
+  dialogs/qprogressdialog.h
+  itemviews/qabstractitemview.h
+  itemviews/qabstractproxymodel.h
+  itemviews/qcolumnview.h
+  itemviews/qdatawidgetmapper.h
+  itemviews/qdirmodel.h
+  itemviews/qheaderview.h
+  itemviews/qidentityproxymodel.h
+  itemviews/qitemdelegate.h
+  itemviews/qitemselectionmodel.h
+  itemviews/qlistwidget.h
+  itemviews/qproxymodel.h
+  itemviews/qstandarditemmodel.h
+  itemviews/qstyleditemdelegate.h
+  itemviews/qtableview.h
+  itemviews/qtablewidget.h
+  itemviews/qtreeview.h
+  itemviews/qtreewidget.h
+  kernel/qaction.h
+  kernel/qactiongroup.h
+  kernel/qapplication.h
+  kernel/qwidget.h
+  kernel/qwidgetaction.h
+  #kernel/qgraphicssystem_runtime.h
+  styles/qstylesheetstyle_p.h
+  text/qabstracttextdocumentlayout.h
+  text/qsyntaxhighlighter.h
+  text/qtextcontrol_p.h
+  text/qtextdocumentlayout_p.h
+  widgets/qabstractscrollarea.h
+  widgets/qabstractscrollarea_p.h
+  widgets/qabstractspinbox.h
+  widgets/qcalendarwidget.h
+  widgets/qcombobox.h
+  widgets/qdatetimeedit.h
+  widgets/qdialogbuttonbox.h
+  widgets/qgroupbox.h
+  widgets/qlabel.h
+  widgets/qlineedit.h
+  widgets/qmdiarea.h
+  widgets/qmdisubwindow.h
+  widgets/qmenu.h
+  widgets/qmenubar.h
+  widgets/qplaintextedit.h
+  widgets/qplaintextedit_p.h
+  widgets/qpushbutton.h
+  widgets/qsizegrip.h
+  widgets/qtabbar.h
+  widgets/qtabwidget.h
+  widgets/qtextbrowser.h
+  widgets/qtextedit.h
+  widgets/qtoolbox.h
+  widgets/qtoolbutton.h
+  dialogs/qfiledialog.h
+)
+
+foreach(moc_file ${moc_files})
+  get_filename_component(file_name ${moc_file} NAME_WE)
+  set(output_file ${moc_dir}/moc_${file_name}.cpp)
+  add_custom_command(
+      OUTPUT ${output_file}
+      COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      VERBATIM
+  )
+  list(APPEND moc_gens ${output_file})
+endforeach()
+
+set(moc_files
+  dialogs/qcolordialog.cpp
+  dialogs/qinputdialog.cpp
+  itemviews/qlistwidget.cpp
+  itemviews/qitemeditorfactory.cpp
+  itemviews/qtableview.cpp
+  image/qpixmapcache.cpp
+  widgets/qcalendarwidget.cpp
+  widgets/qeffects.cpp
+  widgets/qmenu.cpp
+  widgets/qtoolbox.cpp
+  widgets/qmdisubwindow.cpp
+  painting/qgraphicssystem_runtime.cpp
+)
+
+add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${moc_dir})
+foreach(moc_file ${moc_files})
+  get_filename_component(file_name ${moc_file} NAME_WE)
+  set(output_file ${moc_dir}/${file_name}.moc)
+  add_custom_command(
+      OUTPUT ${output_file}
+      COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      VERBATIM
+  )
+  list(APPEND moc_gens ${output_file})
+endforeach()
+
+add_custom_target(QtGui.moc DEPENDS ${moc_gens})
+set_target_properties(QtGui.moc PROPERTIES FOLDER "moc")
+add_dependencies(${target_name} QtGui.moc)
+
 target_compile_definitions(${target_name} PRIVATE QT_BUILD_GUI_LIB)
 
 target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtCore)
 target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtGui)
+target_include_directories(${target_name} PRIVATE ${moc_dir})
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
