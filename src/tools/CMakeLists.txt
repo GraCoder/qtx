@@ -121,3 +121,4 @@ set_target_properties(${target_name} PROPERTIES FOLDER "tools")
 
 add_subdirectory(moc)
 add_subdirectory(uic)
+add_subdirectory(rcc)
