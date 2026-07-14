@@ -50,13 +50,13 @@
 //#define QT_NO_ACTION
 
 // Big Codecs
-#define QT_NO_BIG_CODECS
+//#define QT_NO_BIG_CODECS
 
 // Color Names
 //#define QT_NO_COLORNAMES
 
 // QtConcurrent
-#define QT_NO_CONCURRENT
+//#define QT_NO_CONCURRENT
 
 // QCopChannel
 //#define QT_NO_COP
@@ -68,13 +68,13 @@
 //#define QT_NO_CURSOR
 
 // QDesktopServices
-#define QT_NO_DESKTOPSERVICES
+//#define QT_NO_DESKTOPSERVICES
 
 // QDirectPainter
 //#define QT_NO_DIRECTPAINTER
 
 // Document Object Model
-#define QT_NO_DOM
+//#define QT_NO_DOM
 
 // Effects
 //#define QT_NO_EFFECTS
@@ -86,10 +86,10 @@
 //#define QT_NO_FILESYSTEMWATCHER
 
 // Freetype Font Engine
-#define QT_NO_FREETYPE
+//#define QT_NO_FREETYPE
 
 // Gesture
-#define QT_NO_GESTURES
+//#define QT_NO_GESTURES
 
 // QGroupBox
 //#define QT_NO_GROUPBOX
@@ -98,18 +98,19 @@
 //#define QT_NO_IMAGEFORMATPLUGIN
 
 // BMP Image Format
-#define QT_NO_IMAGEFORMAT_BMP
+//#define QT_NO_IMAGEFORMAT_BMP
+
+// JPEG Image Format
+//#define QT_NO_IMAGEFORMAT_JPEG
 
 // PNG Image Format
 //#define QT_NO_IMAGEFORMAT_PNG
 
 // PPM Image Format
-#define QT_NO_IMAGEFORMAT_PPM
+//#define QT_NO_IMAGEFORMAT_PPM
 
 // XBM Image Format
-#define QT_NO_IMAGEFORMAT_XBM
-#define QT_NO_IMAGEFORMAT_MNG
-#define QT_NO_IMAGEFORMAT_XPM
+//#define QT_NO_IMAGEFORMAT_XBM
 
 // QImage::createHeuristicMask()
 //#define QT_NO_IMAGE_HEURISTIC_MASK
@@ -118,7 +119,7 @@
 //#define QT_NO_IMAGE_TEXT
 
 // QLCDNumber
-#define QT_NO_LCDNUMBER
+//#define QT_NO_LCDNUMBER
 
 // QLineEdit
 //#define QT_NO_LINEEDIT
@@ -127,13 +128,13 @@
 //#define QT_NO_MESSAGEBOX
 
 // QMovie
-#define QT_NO_MOVIE
+//#define QT_NO_MOVIE
 
 // QNetworkInterface
-#define QT_NO_NETWORKINTERFACE
+//#define QT_NO_NETWORKINTERFACE
 
 // QNetworkProxy
-#define QT_NO_NETWORKPROXY
+//#define QT_NO_NETWORKPROXY
 
 // Qt::WA_PaintOnScreen
 //#define QT_NO_PAINTONSCREEN
@@ -151,13 +152,13 @@
 //#define QT_NO_PHONON_EFFECT
 
 // Phonon::MediaController
-#define QT_NO_PHONON_MEDIACONTROLLER
+//#define QT_NO_PHONON_MEDIACONTROLLER
 
 // Phonon::ObjectDescriptionModel
 //#define QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
 // Phonon::VideoWidget
-#define QT_NO_PHONON_VIDEO
+//#define QT_NO_PHONON_VIDEO
 
 // QPicture
 //#define QT_NO_PICTURE
@@ -175,37 +176,37 @@
 //#define QT_NO_QUUID_STRING
 
 // QWSEmbedWidget
-#define QT_NO_QWSEMBEDWIDGET
+//#define QT_NO_QWSEMBEDWIDGET
 
 // Decoration
 //#define QT_NO_QWS_DECORATION_DEFAULT
 
 // Keyboard
-#define QT_NO_QWS_KEYBOARD
+//#define QT_NO_QWS_KEYBOARD
 
 // Mouse
-#define QT_NO_QWS_MOUSE
+//#define QT_NO_QWS_MOUSE
 
 // Mouse (Auto)
-#define QT_NO_QWS_MOUSE_AUTO
+//#define QT_NO_QWS_MOUSE_AUTO
 
 // Mouse (Non-Auto)
-#define QT_NO_QWS_MOUSE_MANUAL
+//#define QT_NO_QWS_MOUSE_MANUAL
 
 // Multi-Process
-#define QT_NO_QWS_MULTIPROCESS
+//#define QT_NO_QWS_MULTIPROCESS
 
 // Properties
 //#define QT_NO_QWS_PROPERTIES
 
 // QProxyScreen
-#define QT_NO_QWS_PROXYSCREEN
+//#define QT_NO_QWS_PROXYSCREEN
 
 // Qt Prerendered Font Format
-#define QT_NO_QWS_QPF
+//#define QT_NO_QWS_QPF
 
 // Qt Prerendered Font Format 2
-#define QT_NO_QWS_QPF2
+//#define QT_NO_QWS_QPF2
 
 // Raster Paint Engine callback functions
 //#define QT_NO_RASTERCALLBACKS
@@ -220,13 +221,13 @@
 //#define QT_NO_SESSIONMANAGER
 
 // QSettings
-#define QT_NO_SETTINGS
+//#define QT_NO_SETTINGS
 
 // QSharedMemory
-#define QT_NO_SHAREDMEMORY
+//#define QT_NO_SHAREDMEMORY
 
 // QShortcut
-#define QT_NO_SHORTCUT
+//#define QT_NO_SHORTCUT
 
 // QSignalMapper
 //#define QT_NO_SIGNALMAPPER
@@ -238,13 +239,13 @@
 //#define QT_NO_SLIDER
 
 // Sounds
-#define QT_NO_SOUND
+//#define QT_NO_SOUND
 
 // Spin Widget
 //#define QT_NO_SPINWIDGET
 
 // Splash screen widget
-#define QT_NO_SPLASHSCREEN
+//#define QT_NO_SPLASHSCREEN
 
 // QStackedWidget
 //#define QT_NO_STACKEDWIDGET
@@ -256,28 +257,28 @@
 //#define QT_NO_STATUSTIP
 
 // Standard Template Library
-#define QT_NO_STL
+//#define QT_NO_STL
 
 // QMotifStyle
-#define QT_NO_STYLE_MOTIF
+//#define QT_NO_STYLE_MOTIF
 
 // QWindowsStyle
 //#define QT_NO_STYLE_WINDOWS
 
 // QSystemSemaphore
-#define QT_NO_SYSTEMSEMAPHORE
+//#define QT_NO_SYSTEMSEMAPHORE
 
 // QSystemTrayIcon
 //#define QT_NO_SYSTEMTRAYICON
 
 // QTabletEvent
-#define QT_NO_TABLETEVENT
+//#define QT_NO_TABLETEVENT
 
 // QTemporaryFile
 //#define QT_NO_TEMPORARYFILE
 
 // QTextCodec
-#define QT_NO_TEXTCODEC
+//#define QT_NO_TEXTCODEC
 
 // Text Date
 //#define QT_NO_TEXTDATE
@@ -289,16 +290,16 @@
 //#define QT_NO_TEXTSTREAM
 
 // QToolTip
-#define QT_NO_TOOLTIP
+//#define QT_NO_TOOLTIP
 
 // Translation
-#define QT_NO_TRANSLATION
+//#define QT_NO_TRANSLATION
 
 // QUdpSocket
 //#define QT_NO_UDPSOCKET
 
 // QUndoCommand
-#define QT_NO_UNDOCOMMAND
+//#define QT_NO_UNDOCOMMAND
 
 // QUrlInfo
 //#define QT_NO_URLINFO
@@ -309,11 +310,13 @@
 // QWheelEvent
 //#define QT_NO_WHEELEVENT
 
+// 
+//#define QT_NO_XMLSTREAM
+
 // Animation
 #if !defined(QT_NO_ANIMATION) && (defined(QT_NO_PROPERTIES))
 #define QT_NO_ANIMATION
 #endif
-#define QT_NO_ANIMATION
 
 // QButtonGroup
 #if !defined(QT_NO_BUTTONGROUP) && (defined(QT_NO_GROUPBOX))
@@ -485,7 +488,7 @@
 #define QT_NO_WIN_ACTIVEQT
 #endif
 
-// QFrameless
+// QWizard
 #if !defined(QT_NO_WIZARD) && (defined(QT_NO_PROPERTIES))
 #define QT_NO_WIZARD
 #endif
@@ -704,7 +707,6 @@
 #if !defined(QT_NO_MAINWINDOW) && (defined(QT_NO_MENU) || defined(QT_NO_RESIZEHANDLER) || defined(QT_NO_TOOLBUTTON))
 #define QT_NO_MAINWINDOW
 #endif
-#define QT_NO_MAINWINDOW
 
 // QAbstractProxyModel
 #if !defined(QT_NO_PROXYMODEL) && (defined(QT_NO_ITEMVIEWS))
@@ -815,7 +817,6 @@
 #if !defined(QT_NO_UNDOVIEW) && (defined(QT_NO_UNDOSTACK) || defined(QT_NO_LISTVIEW))
 #define QT_NO_UNDOVIEW
 #endif
-#define QT_NO_UNDOVIEW
 
 // QCompleter
 #if !defined(QT_NO_FSCOMPLETER) && (defined(QT_NO_FILESYSTEMMODEL) || defined(QT_NO_COMPLETER))
@@ -878,7 +879,7 @@
 #endif
 
 // QFileDialog
-#if !defined(QT_NO_FILEDIALOG) && (defined(QT_NO_DIRMODEL) || defined(QT_NO_TREEVIEW) || defined(QT_NO_COMBOBOX) || defined(QT_NO_TOOLBUTTON) || defined(QT_NO_BUTTONGROUP) || defined(QT_NO_SPLITTER) || defined(QT_NO_STACKEDWIDGET) || defined(QT_NO_PROXYMODEL))
+#if !defined(QT_NO_FILEDIALOG) && (defined(QT_NO_DIRMODEL) || defined(QT_NO_TREEVIEW) || defined(QT_NO_COMBOBOX) || defined(QT_NO_TOOLBUTTON) || defined(QT_NO_BUTTONGROUP) || defined(QT_NO_TOOLTIP) || defined(QT_NO_SPLITTER) || defined(QT_NO_STACKEDWIDGET) || defined(QT_NO_PROXYMODEL))
 #define QT_NO_FILEDIALOG
 #endif
 
@@ -886,3 +887,4 @@
 #if !defined(QT_NO_PRINTPREVIEWDIALOG) && (defined(QT_NO_PRINTPREVIEWWIDGET) || defined(QT_NO_PRINTDIALOG) || defined(QT_NO_TOOLBAR))
 #define QT_NO_PRINTPREVIEWDIALOG
 #endif
+

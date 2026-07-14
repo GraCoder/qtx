@@ -111,14 +111,13 @@ target_include_directories(${target_name} PRIVATE
     ${CMAKE_SOURCE_DIR}/include/QtCore
 )
 
+target_compile_definitions(${target_name} PRIVATE 
+  QT_TEXTCODEC
+  QT_NO_TEXTCODEC
+)
 target_link_libraries(${target_name} PRIVATE zlib)
-
-#install(TARGETS ${target_name}
-#    ARCHIVE DESTINATION lib
-#    LIBRARY DESTINATION lib
-#    RUNTIME DESTINATION bin
-#)
 
 set_target_properties(${target_name} PROPERTIES FOLDER "tools")
 
 add_subdirectory(moc)
+add_subdirectory(uic)

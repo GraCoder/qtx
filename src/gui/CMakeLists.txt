@@ -64,6 +64,7 @@ set(moc_def
   -DQT_NO_COMPLETER
   -DQT_NO_MOVIE
   -DQT_NO_ANIMATION
+  -DQT_NO_STYLE_STYLESHEET
 )
 set(moc_dir ${CMAKE_CURRENT_BINARY_DIR}/QtGui.moc/$<CONFIG>)
 set(moc_files
@@ -74,23 +75,23 @@ set(moc_files
   dialogs/qfilesystemmodel.h
   dialogs/qmessagebox.h
   dialogs/qprogressdialog.h
-  itemviews/qabstractitemview.h
-  itemviews/qabstractproxymodel.h
-  itemviews/qcolumnview.h
-  itemviews/qdatawidgetmapper.h
-  itemviews/qdirmodel.h
-  itemviews/qheaderview.h
-  itemviews/qidentityproxymodel.h
-  itemviews/qitemdelegate.h
-  itemviews/qitemselectionmodel.h
-  itemviews/qlistwidget.h
-  itemviews/qproxymodel.h
-  itemviews/qstandarditemmodel.h
-  itemviews/qstyleditemdelegate.h
-  itemviews/qtableview.h
-  itemviews/qtablewidget.h
-  itemviews/qtreeview.h
-  itemviews/qtreewidget.h
+  #itemviews/qabstractitemview.h
+  #itemviews/qabstractproxymodel.h
+  #itemviews/qcolumnview.h
+  #itemviews/qdatawidgetmapper.h
+  #itemviews/qdirmodel.h
+  #itemviews/qheaderview.h
+  #itemviews/qidentityproxymodel.h
+  #itemviews/qitemdelegate.h
+  #itemviews/qitemselectionmodel.h
+  #itemviews/qlistwidget.h
+  #itemviews/qproxymodel.h
+  #itemviews/qstandarditemmodel.h
+  #itemviews/qstyleditemdelegate.h
+  #itemviews/qtableview.h
+  #itemviews/qtablewidget.h
+  #itemviews/qtreeview.h
+  #itemviews/qtreewidget.h
   kernel/qaction.h
   kernel/qactiongroup.h
   kernel/qapplication.h
