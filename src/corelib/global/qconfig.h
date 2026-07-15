@@ -318,11 +318,11 @@
 # define QT_NO_DESKTOPSERVICES
 #endif
 
-#if defined(QT_DOM) && defined(QT_NO_DOM)
-# undef QT_NO_DOM
-#elif !defined(QT_NO_DOM)
-# define QT_NO_DOM
-#endif
+//#if defined(QT_DOM) && defined(QT_NO_DOM)
+//# undef QT_NO_DOM
+//#elif !defined(QT_NO_DOM)
+//# define QT_NO_DOM
+//#endif
 
 #if defined(QT_FREETYPE) && defined(QT_NO_FREETYPE)
 # undef QT_NO_FREETYPE

@@ -186,6 +186,9 @@ static const signed char charLookupTable[256]={
   This function is used for external entities since those can include an
   TextDecl that must be stripped before inserting the entity.
 */
+#ifdef QT_NO_REGEXP
+extern bool stripTextDecl(QString &str);
+#else
 static bool stripTextDecl(QString& str)
 {
     QString textDeclStart(QLatin1String("<?xml"));
@@ -204,6 +207,7 @@ static bool stripTextDecl(QString& str)
     }
     return true;
 }
+#endif
 
 
 class QXmlAttributesPrivate
@@ -8228,3 +8232,27 @@ void QXmlSimpleReaderPrivate::refAddC(QChar ch)
     refArray[refArrayPos++] = ch;
 }
 QT_END_NAMESPACE
+
+#include <string>
+#include <regex>
+bool stripTextDecl(QString &str) 
+{
+  const std::string textDeclStart = "<?xml";
+  std::string sstr = str.toAscii().data();
+  if (sstr.rfind(textDeclStart, 0) == 0) {
+    static const std::regex textDecl(R"(^<\?xml\s+)"
+                                     R"((version\s*=\s*(['"])[-a-zA-Z0-9_.:]+\3)?)"
+                                     R"(\s*)"
+                                     R"((encoding\s*=\s*(['"])[A-Za-z][-a-zA-Z0-9_.]*\6)?)"
+                                     R"(\s*\?>)");
+
+    size_t originalLength = str.length();
+    std::string result = std::regex_replace(sstr, textDecl, "");
+
+    if (result.length() != originalLength)
+      return false;
+
+    str = QString::fromAscii(result.c_str());
+  }
+  return true;
+}

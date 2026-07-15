@@ -3403,6 +3403,6 @@ void QTextStream::setEncoding(Encoding encoding)
 QT_END_NAMESPACE
 
 #ifndef QT_NO_QOBJECT
-//#include "qtextstream.moc"
+#include "qtextstream.moc"
 #endif
 

@@ -82,6 +82,8 @@ add_library(${target_name} ${moc_gens}
 )
 
 set(moc_gens)
+add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${moc_dir})
+
 set(moc_files
   kernel/qobject.h
   global/qnamespace.h
@@ -91,7 +93,6 @@ set(moc_files
 set(moc_def
   -DQT_NO_GESTURES
 )
-add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${moc_dir})
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
   set(output_file ${moc_dir}/moc_${file_name}.cpp)
@@ -103,6 +104,22 @@ foreach(moc_file ${moc_files})
   )
   list(APPEND moc_gens ${output_file})
 endforeach()
+
+set(moc_files
+  io/qtextstream.cpp
+)
+foreach(moc_file ${moc_files})
+  get_filename_component(file_name ${moc_file} NAME_WE)
+  set(output_file ${moc_dir}/${file_name}.moc)
+  add_custom_command(
+      OUTPUT ${output_file}
+      COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      VERBATIM
+  )
+  list(APPEND moc_gens ${output_file})
+endforeach()
+
 add_custom_target(QtCore.moc DEPENDS ${moc_gens})
 set_target_properties(QtCore.moc PROPERTIES FOLDER "moc")
 add_dependencies(${target_name} QtCore.moc)

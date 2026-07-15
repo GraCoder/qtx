@@ -904,8 +904,12 @@ bool RCCResourceLibrary::writeInitializer()
         //write("\nQT_BEGIN_NAMESPACE\n");
         QString initName = m_initName;
         if (!initName.isEmpty()) {
-            initName.prepend(QLatin1Char('_'));
-            initName.replace(QRegExp(QLatin1String("[^a-zA-Z0-9_]")), QLatin1String("_"));
+          initName.prepend(QLatin1Char('_'));
+          for (QChar &c : initName) {
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')) {
+              c = '_';
+            }
+          }
         }
 
         //init
