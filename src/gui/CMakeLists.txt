@@ -24,21 +24,25 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
   ${util_files}
 )
 
-#set(ui_
-#  dialogs/qfiledialog.ui
-#)
-#qt4_wrap_ui(uifiles ${ui_})
-#source_group("ui" ${CMAKE_CURRENT_SOURCE_DIR} FILES ${uifiles})
+set(gen_dir ${CMAKE_CURRENT_BINARY_DIR}/QtGui.gen/$<CONFIG>)
 
-#set(CMAKE_AUTORCC ON)
-#set(rcc_files
-#  styles/qstyle.qrc
-#  dialogs/qmessagebox.qrc
-#)
+set(rcc_files
+  styles/qstyle.qrc
+  dialogs/qmessagebox.qrc
+)
+foreach(rcc_file ${rcc_files})
+  get_filename_component(file_name ${rcc_file} NAME_WE)
+  set(output_file ${gen_dir}/qrc_${file_name}.cpp)
+  add_custom_command(
+      OUTPUT ${output_file}
+      COMMAND ${rcc_exe} -name ${file_name} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${rcc_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${rcc_file}
+      VERBATIM
+  )
+  list(APPEND gens ${output_file})
+endforeach()
 
-#set(CMAKE_AUTOMOC ON)
-
-add_library(${target_name} ${moc_gens}
+add_library(${target_name} ${gens}
   ${kernel_files}
   ${style_files}
   ${image_files}
@@ -50,6 +54,8 @@ add_library(${target_name} ${moc_gens}
   ${math_files}
   ${util_files}
 )
+
+add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir})
 
 set(moc_def
   -DQT_NO_GESTURES
@@ -66,7 +72,7 @@ set(moc_def
   -DQT_NO_ANIMATION
   -DQT_NO_STYLE_STYLESHEET
 )
-set(moc_dir ${CMAKE_CURRENT_BINARY_DIR}/QtGui.moc/$<CONFIG>)
+
 set(moc_files
   dialogs/qdialog.h
   dialogs/qcolordialog.h
@@ -75,23 +81,23 @@ set(moc_files
   dialogs/qfilesystemmodel.h
   dialogs/qmessagebox.h
   dialogs/qprogressdialog.h
-  #itemviews/qabstractitemview.h
-  #itemviews/qabstractproxymodel.h
-  #itemviews/qcolumnview.h
-  #itemviews/qdatawidgetmapper.h
-  #itemviews/qdirmodel.h
-  #itemviews/qheaderview.h
-  #itemviews/qidentityproxymodel.h
-  #itemviews/qitemdelegate.h
-  #itemviews/qitemselectionmodel.h
-  #itemviews/qlistwidget.h
-  #itemviews/qproxymodel.h
-  #itemviews/qstandarditemmodel.h
-  #itemviews/qstyleditemdelegate.h
-  #itemviews/qtableview.h
-  #itemviews/qtablewidget.h
-  #itemviews/qtreeview.h
-  #itemviews/qtreewidget.h
+  itemviews/qabstractitemview.h
+  itemviews/qabstractproxymodel.h
+  itemviews/qcolumnview.h
+  itemviews/qdatawidgetmapper.h
+  itemviews/qdirmodel.h
+  itemviews/qheaderview.h
+  itemviews/qidentityproxymodel.h
+  itemviews/qitemdelegate.h
+  itemviews/qitemselectionmodel.h
+  itemviews/qlistwidget.h
+  itemviews/qproxymodel.h
+  itemviews/qstandarditemmodel.h
+  itemviews/qstyleditemdelegate.h
+  itemviews/qtableview.h
+  itemviews/qtablewidget.h
+  itemviews/qtreeview.h
+  itemviews/qtreewidget.h
   kernel/qaction.h
   kernel/qactiongroup.h
   kernel/qapplication.h
@@ -129,17 +135,16 @@ set(moc_files
   widgets/qtoolbutton.h
   dialogs/qfiledialog.h
 )
-
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
-  set(output_file ${moc_dir}/moc_${file_name}.cpp)
+  set(output_file ${gen_dir}/moc_${file_name}.cpp)
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
       VERBATIM
   )
-  list(APPEND moc_gens ${output_file})
+  list(APPEND gens ${output_file})
 endforeach()
 
 set(moc_files
@@ -156,29 +161,35 @@ set(moc_files
   widgets/qmdisubwindow.cpp
   painting/qgraphicssystem_runtime.cpp
 )
-
-add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${moc_dir})
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
-  set(output_file ${moc_dir}/${file_name}.moc)
+  set(output_file ${gen_dir}/${file_name}.moc)
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
       VERBATIM
   )
-  list(APPEND moc_gens ${output_file})
+  list(APPEND gens ${output_file})
 endforeach()
 
-add_custom_target(QtGui.moc DEPENDS ${moc_gens})
-set_target_properties(QtGui.moc PROPERTIES FOLDER "moc")
-add_dependencies(${target_name} QtGui.moc)
+set(ui_file ${gen_dir}/ui_qfiledialog.h)
+add_custom_command(
+    OUTPUT ${ui_file}
+    COMMAND ${uic_exe} -o ${ui_file} ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.ui
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.ui
+    VERBATIM
+)
+
+add_custom_target(QtGui.gen DEPENDS ${gens} ${ui_file})
+set_target_properties(QtGui.gen PROPERTIES FOLDER "gen")
+add_dependencies(${target_name} QtGui.gen)
 
 target_compile_definitions(${target_name} PRIVATE QT_BUILD_GUI_LIB)
 
 target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtCore)
 target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtGui)
-target_include_directories(${target_name} PRIVATE ${moc_dir})
+target_include_directories(${target_name} PRIVATE ${gen_dir})
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 

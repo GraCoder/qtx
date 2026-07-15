@@ -14,6 +14,8 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
 	${io_files} ${thread_files} ${codecs_files} ${xml_files} ${plugin_files}
 )
 
+set(gen_dir ${CMAKE_CURRENT_BINARY_DIR}/QtCore.gen/$<CONFIG>)
+
 set(moc_files
     kernel/qabstracteventdispatcher.h
     kernel/qabstractitemmodel.h
@@ -63,26 +65,27 @@ set(moc_files
     #concurrent/qthreadpool.h
 )
 
-set(moc_dir ${CMAKE_CURRENT_BINARY_DIR}/QtCore.moc/$<CONFIG>)
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
-  set(output_file ${moc_dir}/moc_${file_name}.cpp)
+  set(output_file ${gen_dir}/moc_${file_name}.cpp)
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
       VERBATIM
   )
-  list(APPEND moc_gens ${output_file})
+  list(APPEND gens ${output_file})
 endforeach()
 
-add_library(${target_name} ${moc_gens} 
+add_library(${target_name} ${gens} 
 	${kernel_files} ${global_files} ${tools_files}
 	${io_files} ${thread_files} ${codecs_files} ${xml_files} ${plugin_files}
 )
 
-set(moc_gens)
-add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${moc_dir})
+add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir})
+
+set(gens)
+set(moc_def -DQT_NO_GESTURES)
 
 set(moc_files
   kernel/qobject.h
@@ -90,19 +93,16 @@ set(moc_files
   io/qbuffer.h
   io/qfilesystemwatcher.h
 )
-set(moc_def
-  -DQT_NO_GESTURES
-)
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
-  set(output_file ${moc_dir}/moc_${file_name}.cpp)
+  set(output_file ${gen_dir}/moc_${file_name}.cpp)
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
       VERBATIM
   )
-  list(APPEND moc_gens ${output_file})
+  list(APPEND gens ${output_file})
 endforeach()
 
 set(moc_files
@@ -110,26 +110,26 @@ set(moc_files
 )
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
-  set(output_file ${moc_dir}/${file_name}.moc)
+  set(output_file ${gen_dir}/${file_name}.moc)
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
       VERBATIM
   )
-  list(APPEND moc_gens ${output_file})
+  list(APPEND gens ${output_file})
 endforeach()
 
-add_custom_target(QtCore.moc DEPENDS ${moc_gens})
-set_target_properties(QtCore.moc PROPERTIES FOLDER "moc")
-add_dependencies(${target_name} QtCore.moc)
+add_custom_target(QtCore.gen DEPENDS ${gens})
+set_target_properties(QtCore.gen PROPERTIES FOLDER "gen")
+add_dependencies(${target_name} QtCore.gen)
 
 target_compile_definitions(${target_name} PUBLIC QT_HAVE_SSE QT_HAVE_SSE2 QT_HAVE_SSE3 QT_HAVE_SSSE3 QT_HAVE_SSE4_1 QT_HAVE_SSE4_2)
 
 target_compile_definitions(${target_name} PRIVATE QT_BUILD_CORE_LIB)
 
 target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtCore)
-target_include_directories(${target_name} PRIVATE ${moc_dir})
+target_include_directories(${target_name} PRIVATE ${gen_dir})
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:zlib>)

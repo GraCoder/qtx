@@ -12,8 +12,9 @@ set(source_files
 
 add_executable(${target_name} ${source_files})
 
-target_compile_definitions(${target_name} PRIVATE QT_UIC QT_TEXTCODEC QT_NO_TEXTCODEC)
+target_compile_definitions(${target_name} PRIVATE QT_UIC QT_TEXTCODEC QT_NO_TEXTCODEC QT_UIC_CPP_GENERATOR)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/cpp)
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/include/QtCore)
 target_link_libraries(${target_name} PUBLIC bootstrap)
 

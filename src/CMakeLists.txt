@@ -19,6 +19,8 @@ set(CMAKE_DEBUG_POSTFIX "d")
 
 add_subdirectory(tools)
 set(moc_exe $<TARGET_FILE:moc>)
+set(uic_exe $<TARGET_FILE:uic>)
+set(rcc_exe $<TARGET_FILE:rcc>)
 
 add_subdirectory(corelib)
 add_subdirectory(gui)
