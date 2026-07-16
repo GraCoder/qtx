@@ -132,6 +132,12 @@
 # define QT_NO_STL
 #endif
 
+#if defined(QT_NO_STYLE_STYLESHEET) && defined(QT_STYLE_STYLESHEET)
+  #undef QT_NO_STYLE_STYLESHEET
+#elif !defined(QT_NO_STYLE_STYLESHEET)
+  #define QT_NO_STYLE_STYLESHEET
+#endif
+
 #if defined(QT_NO_STYLE_GTK) && defined(QT_STYLE_GTK)
 # undef QT_NO_STYLE_GTK
 #elif !defined(QT_NO_STYLE_GTK)

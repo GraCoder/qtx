@@ -26,6 +26,93 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
 
 set(gen_dir ${CMAKE_CURRENT_BINARY_DIR}/QtGui.gen/$<CONFIG>)
 
+set(moc_def
+  -DQT_NO_GESTURES
+  -DQT_NO_TOOLTIP
+  -DQT_NO_DRAGANDDROP
+  -DQT_NO_SHORTCUT
+  -DQT_NO_TOOLTIP
+  -DQT_NO_TRANSLATION
+  -DQT_NO_STATUSTIP
+  -DQT_NO_WHATSTHIS
+  -DQT_NO_ACCESSIBILITY
+  -DQT_NO_COMPLETER
+  -DQT_NO_MOVIE
+  -DQT_NO_ANIMATION
+  -DQT_NO_STYLE_STYLESHEET
+)
+
+set(moc_files
+  kernel/qsessionmanager.h
+  kernel/qclipboard.h
+  kernel/qdnd_p.h
+  kernel/qdesktopwidget.h
+  kernel/qkeymapper_p.h
+  kernel/qguiplatformplugin_p.h
+  kernel/qlayout.h
+  kernel/qboxlayout.h
+  kernel/qgridlayout.h
+  kernel/qformlayout.h
+  kernel/qstackedlayout.h
+  
+  widgets/qframe.h
+  widgets/qabstractbutton.h
+  widgets/qbuttongroup.h
+  widgets/qabstractslider.h
+  widgets/qscrollbar.h
+  widgets/qspinbox.h
+  widgets/qvalidator.h
+  widgets/qprogressbar.h
+  widgets/qrubberband.h
+  widgets/qsplitter.h
+  widgets/qstackedwidget.h
+  widgets/qcheckbox.h
+  widgets/qradiobutton.h
+  widgets/qslider.h
+  widgets/qcommandlinkbutton.h
+  widgets/qcalendartextnavigator_p.h
+  widgets/qdatetimeedit_p.h
+  widgets/qcombobox_p.h
+  widgets/qlinecontrol_p.h
+  widgets/qtabbar_p.h
+  
+  itemviews/qabstractitemdelegate.h
+  itemviews/qlistview.h
+  itemviews/qitemeditorfactory_p.h
+  
+  dialogs/qfileinfogatherer_p.h
+  dialogs/qsidebar_p.h
+  
+  styles/qstyle.h
+  styles/qcommonstyle.h
+  styles/qwindowsstyle.h
+  styles/qwindowsvistastyle.h
+  styles/qwindowsvistastyle_p.h
+  styles/qwindowsxpstyle.h
+  styles/qwindowsxpstyle_p.h
+  
+  text/qfont_p.h
+  text/qfontenginedirectwrite_p.h
+  text/qtextdocument.h
+  text/qtextobject.h
+  text/qtexttable.h
+  text/qtextimagehandler_p.h
+  text/qtextlist.h
+  
+  image/qimageiohandler.h
+)
+foreach(moc_file ${moc_files})
+  get_filename_component(file_name ${moc_file} NAME_WE)
+  set(output_file ${gen_dir}/moc_${file_name}.cpp)
+  add_custom_command(
+      OUTPUT ${output_file}
+      COMMAND ${moc_exe} -I${CMAKE_SOURCE_DIR}/include ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
+      VERBATIM
+  )
+  list(APPEND gens ${output_file})
+endforeach()
+
 set(rcc_files
   styles/qstyle.qrc
   dialogs/qmessagebox.qrc
@@ -55,23 +142,8 @@ add_library(${target_name} ${gens}
   ${util_files}
 )
 
+set(gens)
 add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir})
-
-set(moc_def
-  -DQT_NO_GESTURES
-  -DQT_NO_TOOLTIP
-  -DQT_NO_DRAGANDDROP
-  -DQT_NO_SHORTCUT
-  -DQT_NO_TOOLTIP
-  -DQT_NO_TRANSLATION
-  -DQT_NO_STATUSTIP
-  -DQT_NO_WHATSTHIS
-  -DQT_NO_ACCESSIBILITY
-  -DQT_NO_COMPLETER
-  -DQT_NO_MOVIE
-  -DQT_NO_ANIMATION
-  -DQT_NO_STYLE_STYLESHEET
-)
 
 set(moc_files
   dialogs/qdialog.h
@@ -141,7 +213,7 @@ foreach(moc_file ${moc_files})
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       VERBATIM
   )
   list(APPEND gens ${output_file})
@@ -160,6 +232,7 @@ set(moc_files
   widgets/qtoolbox.cpp
   widgets/qmdisubwindow.cpp
   painting/qgraphicssystem_runtime.cpp
+  styles/qstylesheetstyle.cpp
 )
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
@@ -167,7 +240,7 @@ foreach(moc_file ${moc_files})
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       VERBATIM
   )
   list(APPEND gens ${output_file})

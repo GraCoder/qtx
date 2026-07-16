@@ -18,9 +18,9 @@ add_definitions(-DQT_NO_DEBUG)
 set(CMAKE_DEBUG_POSTFIX "d")
 
 add_subdirectory(tools)
-set(moc_exe $<TARGET_FILE:moc>)
-set(uic_exe $<TARGET_FILE:uic>)
-set(rcc_exe $<TARGET_FILE:rcc>)
+set(moc_exe $<TARGET_FILE:moc> CACHE INTERNAL "")
+set(uic_exe $<TARGET_FILE:uic> CACHE INTERNAL "")
+set(rcc_exe $<TARGET_FILE:rcc> CACHE INTERNAL "")
 
 add_subdirectory(corelib)
 add_subdirectory(gui)

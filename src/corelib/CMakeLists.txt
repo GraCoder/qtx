@@ -71,7 +71,7 @@ foreach(moc_file ${moc_files})
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       VERBATIM
   )
   list(APPEND gens ${output_file})
@@ -99,14 +99,16 @@ foreach(moc_file ${moc_files})
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       VERBATIM
   )
   list(APPEND gens ${output_file})
 endforeach()
 
 set(moc_files
+  kernel/qtimer.cpp
   io/qtextstream.cpp
+  io/qfilesystemwatcher.cpp
 )
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
@@ -114,7 +116,7 @@ foreach(moc_file ${moc_files})
   add_custom_command(
       OUTPUT ${output_file}
       COMMAND ${moc_exe} ${moc_def} -o ${output_file} ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input_file}
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${moc_file}
       VERBATIM
   )
   list(APPEND gens ${output_file})

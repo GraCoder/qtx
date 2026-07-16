@@ -323,7 +323,7 @@ void QSingleShotTimer::timerEvent(QTimerEvent *)
 }
 
 QT_BEGIN_INCLUDE_NAMESPACE
-//#include "qtimer.moc"
+#include "qtimer.moc"
 QT_END_INCLUDE_NAMESPACE
 
 /*!
