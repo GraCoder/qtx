@@ -12,9 +12,9 @@ int main(int argc, char **argv)
 {
   auto obj = new QObject;
   
-  //Q_IMPORT_PLUGIN(QSvgIconPlugin);
-  //Q_IMPORT_PLUGIN(QSvgPlugin);
-  //Q_IMPORT_PLUGIN(QJpegPlugin);
+  Q_IMPORT_PLUGIN(QSvgIconPlugin);
+  Q_IMPORT_PLUGIN(QSvgPlugin);
+  Q_IMPORT_PLUGIN(QJpegPlugin);
 
   QApplication app(argc, argv);
 

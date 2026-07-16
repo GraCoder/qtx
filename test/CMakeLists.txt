@@ -48,7 +48,6 @@ add_custom_command(TARGET ${target_name} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E m
 
 target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-#target_link_libraries(${target_name} PRIVATE QtCore QtGui QtSvg qtmain qsvg qsvgicon qjpeg)
-target_link_libraries(${target_name} PRIVATE QtCore QtGui)
+target_link_libraries(${target_name} PRIVATE QtCore QtGui QtSvg qtmain qsvg qsvgicon qjpeg)
 
 set_target_properties(${target_name} PROPERTIES FOLDER "test")

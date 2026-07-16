@@ -100,6 +100,7 @@ set(moc_files
   text/qtextlist.h
   
   image/qimageiohandler.h
+  image/qiconengineplugin.h
 )
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
