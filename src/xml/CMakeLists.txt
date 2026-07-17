@@ -20,3 +20,5 @@ target_include_directories(${target_name} PUBLIC ${CMAKE_SOURCE_DIR}/include/QtX
 target_link_libraries(${target_name} PUBLIC QtCore)
 
 install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )
+
+include(install.cmake)

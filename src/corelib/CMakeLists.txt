@@ -137,3 +137,5 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src/3rd)
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:zlib>)
 
 install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )
+
+include(install.cmake)

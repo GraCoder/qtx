@@ -607,21 +607,6 @@ QStringList qmake_feature_paths(QMakeProperty *prop=0)
     return feature_roots;
 }
 
-QStringList qmake_mkspec_paths()
-{
-    QStringList ret;
-    const QString concat = QDir::separator() + QString("mkspecs");
-    QByteArray qmakepath = qgetenv("QMAKEPATH");
-    if (!qmakepath.isEmpty()) {
-        const QStringList lst = splitPathList(QString::fromLocal8Bit(qmakepath));
-        for(QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
-            ret << ((*it) + concat);
-    }
-    ret << QLibraryInfo::location(QLibraryInfo::DataPath) + concat;
-
-    return ret;
-}
-
 QMakeProject::~QMakeProject()
 {
     if(own_prop)

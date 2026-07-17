@@ -42,8 +42,6 @@
 #ifndef QREGEXP_H
 #define QREGEXP_H
 
-#ifndef QT_NO_REGEXP
-
 #include <QtCore/qstring.h>
 #ifdef QT3_SUPPORT
 #include <new>
@@ -163,7 +161,5 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QRegExp &regExp);
 QT_END_NAMESPACE
 
 QT_END_HEADER
-
-#endif // QT_NO_REGEXP
 
 #endif // QREGEXP_H

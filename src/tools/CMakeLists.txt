@@ -12,6 +12,7 @@ set(common_sources
     ${src_dir}/corelib/global/qglobal.cpp
     ${src_dir}/corelib/global/qmalloc.cpp
     ${src_dir}/corelib/global/qnumeric.cpp
+    ${src_dir}/corelib/global/qlibraryinfo.cpp
     ${src_dir}/corelib/io/qabstractfileengine.cpp
     ${src_dir}/corelib/io/qbuffer.cpp
     ${src_dir}/corelib/io/qdatastream.cpp
@@ -87,8 +88,6 @@ endif()
 target_compile_definitions(${target_name} PRIVATE
     QT_BOOTSTRAPPED
     QT_LITE_UNICODE
-    QT_NO_CAST_FROM_ASCII
-    QT_NO_CAST_TO_ASCII
     QT_NO_CODECS
     QT_NO_DATASTREAM
     QT_NO_GEOM_VARIANT

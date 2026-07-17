@@ -50,7 +50,20 @@
 
 QT_BEGIN_NAMESPACE
 
-QStringList qmake_mkspec_paths(); //project.cpp
+QStringList qmake_mkspec_paths()
+{
+    QStringList ret;
+    const QString concat = QDir::separator() + QString("mkspecs");
+    QByteArray qmakepath = qgetenv("QMAKEPATH");
+    if (!qmakepath.isEmpty()) {
+        const QStringList lst = splitPathList(QString::fromLocal8Bit(qmakepath));
+        for(QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
+            ret << ((*it) + concat);
+    }
+    ret << QLibraryInfo::location(QLibraryInfo::DataPath) + concat;
+
+    return ret;
+}
 
 QMakeProperty::QMakeProperty() : settings(0)
 {
@@ -60,14 +73,6 @@ QMakeProperty::~QMakeProperty()
 {
     delete settings;
     settings = 0;
-}
-
-void QMakeProperty::initSettings()
-{
-    if(!settings) {
-        settings = new QSettings(QSettings::UserScope, "Trolltech", "QMake");
-        settings->setFallbacksEnabled(false);
-    }
 }
 
 QString
@@ -113,38 +118,7 @@ QMakeProperty::value(QString v, bool just_check)
     else if(v == "QT_VERSION")
         return QT_VERSION_STR;
 #endif
-
-    initSettings();
-    int slash = v.lastIndexOf('/');
-    QVariant var = settings->value(keyBase(slash == -1) + v);
-    bool ok = var.isValid();
-    QString ret = var.toString();
-    if(!ok) {
-        QString version = qmake_version();
-        if(slash != -1) {
-            version = v.left(slash-1);
-            v = v.mid(slash+1);
-        }
-        settings->beginGroup(keyBase(false));
-        QStringList subs = settings->childGroups();
-        settings->endGroup();
-        subs.sort();
-        for (int x = subs.count() - 1; x >= 0; x--) {
-            QString s = subs[x];
-            if(s.isEmpty() || s > version)
-                continue;
-            var = settings->value(keyBase(false) + s + "/" + v);
-            ok = var.isValid();
-            ret = var.toString();
-            if (ok) {
-                if(!just_check)
-                    debug_msg(1, "Fell back from %s -> %s for '%s'.", version.toLatin1().constData(),
-                              s.toLatin1().constData(), v.toLatin1().constData());
-                return ret;
-            }
-        }
-    }
-    return ok ? ret : QString();
+    return QString();
 }
 
 bool
@@ -156,15 +130,11 @@ QMakeProperty::hasValue(QString v)
 void
 QMakeProperty::setValue(QString var, const QString &val)
 {
-    initSettings();
-    settings->setValue(keyBase() + var, val);
 }
 
 void
 QMakeProperty::remove(const QString &var)
 {
-    initSettings();
-    settings->remove(keyBase() + var);
 }
 
 bool
@@ -173,25 +143,6 @@ QMakeProperty::exec()
     bool ret = true;
     if(Option::qmake_mode == Option::QMAKE_QUERY_PROPERTY) {
         if(Option::prop::properties.isEmpty()) {
-            initSettings();
-            settings->beginGroup(keyBase(false));
-            QStringList subs = settings->childGroups();
-            settings->endGroup();
-            subs.sort();
-            for(int x = subs.count() - 1; x >= 0; x--) {
-                QString s = subs[x];
-                if(s.isEmpty())
-                    continue;
-                settings->beginGroup(keyBase(false) + s);
-                QStringList keys = settings->childKeys();
-                settings->endGroup();
-                for(QStringList::ConstIterator it2 = keys.begin(); it2 != keys.end(); it2++) {
-                    QString ret = settings->value(keyBase(false) + s + "/" + (*it2)).toString();
-                    if(s != qmake_version())
-                        fprintf(stdout, "%s/", s.toLatin1().constData());
-                    fprintf(stdout, "%s:%s\n", (*it2).toLatin1().constData(), ret.toLatin1().constData());
-                }
-            }
             QStringList specialProps;
             specialProps.append("QT_INSTALL_PREFIX");
             specialProps.append("QT_INSTALL_DATA");

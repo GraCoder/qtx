@@ -43,7 +43,7 @@
 #include "property.h"
 #include "option.h"
 #include "cachekeys.h"
-//#include "metamakefile.h"
+#include "metamakefile.h"
 #include <qnamespace.h>
 #include <qdebug.h>
 #include <qregexp.h>
@@ -82,7 +82,6 @@ bool qmake_setpwd(const QString &p)
     return false;
 }
 
-#if 0
 int runQMake(int argc, char **argv)
 {
     // stderr is unbuffered by default, but stdout buffering depends on whether
@@ -132,6 +131,7 @@ int runQMake(int argc, char **argv)
        Option::qmake_mode == Option::QMAKE_UNSET_PROPERTY)
         return prop.exec() ? 0 : 101;
 
+    #if 0
     QMakeProject project(&prop);
     int exit_val = 0;
     QStringList files;
@@ -171,29 +171,30 @@ int runQMake(int argc, char **argv)
                 continue;
         }
 
-        //bool success = true;
-        //MetaMakefileGenerator *mkfile = MetaMakefileGenerator::createMetaGenerator(&project, QString(), false, &success);
-        //if (!success)
-        //    exit_val = 3;
+        bool success = true;
+        MetaMakefileGenerator *mkfile = MetaMakefileGenerator::createMetaGenerator(&project, QString(), false, &success);
+        if (!success)
+            exit_val = 3;
 
-        //if(mkfile && !mkfile->write(oldpwd)) {
-        //    if(Option::qmake_mode == Option::QMAKE_GENERATE_PROJECT)
-        //        fprintf(stderr, "Unable to generate project file.\n");
-        //    else
-        //        fprintf(stderr, "Unable to generate makefile for: %s\n", (*pfile).toLatin1().constData());
-        //    exit_val = 5;
-        //}
-        //delete mkfile;
-        //mkfile = NULL;
+        if(mkfile && !mkfile->write(oldpwd)) {
+            if(Option::qmake_mode == Option::QMAKE_GENERATE_PROJECT)
+                fprintf(stderr, "Unable to generate project file.\n");
+            else
+                fprintf(stderr, "Unable to generate makefile for: %s\n", (*pfile).toLatin1().constData());
+            exit_val = 5;
+        }
+        delete mkfile;
+        mkfile = NULL;
     }
     qmakeClearCaches();
     return exit_val;
+    #endif
+    return 0;
 }
-#endif
 
 QT_END_NAMESPACE
 
 int main(int argc, char **argv)
 {
-    //return QT_PREPEND_NAMESPACE(runQMake)(argc, argv);
+    return QT_PREPEND_NAMESPACE(runQMake)(argc, argv);
 }

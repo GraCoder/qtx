@@ -101,6 +101,9 @@ set(moc_files
   
   image/qimageiohandler.h
   image/qiconengineplugin.h
+
+  util/qsystemtrayicon.h
+  util/qsystemtrayicon_p.h
 )
 foreach(moc_file ${moc_files})
   get_filename_component(file_name ${moc_file} NAME_WE)
@@ -273,3 +276,5 @@ target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:libpng>)
 target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:harfbuzz> $<TARGET_OBJECTS:zlib>)
 
 install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )
+
+include(install.cmake)

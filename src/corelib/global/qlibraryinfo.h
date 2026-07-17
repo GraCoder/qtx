@@ -51,8 +51,6 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(Core)
 
-#ifndef QT_NO_SETTINGS
-
 class Q_CORE_EXPORT QLibraryInfo
 {
 public:
@@ -84,8 +82,6 @@ public:
 private:
     QLibraryInfo();
 };
-
-#endif /* QT_NO_SETTINGS */
 
 QT_END_NAMESPACE
 

@@ -54,8 +54,6 @@
 
 #include <limits.h>
 
-#ifndef QT_NO_REGEXP
-
 QT_BEGIN_NAMESPACE
 
 int qFindString(const QChar *haystack, int haystackLen, int from,
@@ -4507,5 +4505,3 @@ QDataStream &operator>>(QDataStream &in, QRegExp &regExp)
 #endif // QT_NO_DATASTREAM
 
 QT_END_NAMESPACE
-
-#endif

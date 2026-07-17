@@ -19,3 +19,5 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/include/Qt
 target_link_libraries(${target_name} PUBLIC bootstrap)
 
 set_target_properties(${target_name} PROPERTIES FOLDER "tools")
+
+install(TARGETS ${target_name} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib )

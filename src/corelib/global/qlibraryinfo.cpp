@@ -70,9 +70,9 @@ QT_END_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 
-extern void qDumpCPUFeatures(); // in qsimd.cpp
+#if 0
 
-#ifndef QT_NO_SETTINGS
+extern void qDumpCPUFeatures(); // in qsimd.cpp
 
 struct QLibrarySettings
 {
@@ -106,6 +106,7 @@ QLibrarySettings::QLibrarySettings()
 #endif
 }
 
+
 QSettings *QLibraryInfoPrivate::findConfiguration()
 {
     QString qtconfig = QLatin1String(":/qt/etc/qt.conf");
@@ -138,6 +139,8 @@ QSettings *QLibraryInfoPrivate::findConfiguration()
         return new QSettings(qtconfig, QSettings::IniFormat);
     return 0;     //no luck
 }
+
+#endif
 
 /*!
     \class QLibraryInfo
@@ -239,7 +242,8 @@ QString
 QLibraryInfo::location(LibraryLocation loc)
 {
     QString ret;
-    if(!QLibraryInfoPrivate::configuration()) {
+    //if(!QLibraryInfoPrivate::configuration()) {
+    if (1) {
         const char *path = 0;
         switch (loc) {
 #ifdef QT_CONFIGURE_PREFIX_PATH
@@ -359,6 +363,7 @@ QLibraryInfo::location(LibraryLocation loc)
             break;
         }
 
+        #if 0
         if(!key.isNull()) {
             QSettings *config = QLibraryInfoPrivate::configuration();
             config->beginGroup(QLatin1String("Paths"));
@@ -447,6 +452,7 @@ QLibraryInfo::location(LibraryLocation loc)
 
             config->endGroup();
         }
+        #endif
     }
 
     if (QDir::isRelativePath(ret)) {
@@ -504,8 +510,6 @@ QLibraryInfo::location(LibraryLocation loc)
 
     \sa location()
 */
-
-#endif // QT_NO_SETTINGS
 
 QT_END_NAMESPACE
 

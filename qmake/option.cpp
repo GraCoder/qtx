@@ -146,7 +146,20 @@ static QString detectProjectFile(const QString &path)
     return ret;
 }
 
-QString project_builtin_regx();
+QString project_builtin_regx() 
+{
+    QString ret;
+    QStringList builtin_exts;
+    builtin_exts << Option::c_ext << Option::ui_ext << Option::yacc_ext << Option::lex_ext << ".ts" << ".xlf" << ".qrc";
+    builtin_exts += Option::h_ext + Option::cpp_ext;
+    for(int i = 0; i < builtin_exts.size(); ++i) {
+        if(!ret.isEmpty())
+            ret += "; ";
+        ret += QString("*") + builtin_exts[i];
+    }
+    return ret;
+}
+
 bool usage(const char *a0)
 {
     fprintf(stdout, "Usage: %s [mode] [options] [files]\n"
@@ -568,6 +581,7 @@ void Option::applyHostMode()
    }
 }
 
+#if 0
 bool Option::postProcessProject(QMakeProject *project)
 {
     Option::cpp_ext = project->variables()["QMAKE_EXT_CPP"];
@@ -620,6 +634,7 @@ bool Option::postProcessProject(QMakeProject *project)
         Option::sysenv_mod = project->first("QMAKE_MOD_SYSTEM_ENV");
     return true;
 }
+#endif
 
 QString
 Option::fixString(QString string, uchar flags)

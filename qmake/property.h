@@ -52,7 +52,6 @@ class QSettings;
 class QMakeProperty
 {
     QSettings *settings;
-    void initSettings();
     QString keyBase(bool =true) const;
     QString value(QString, bool just_check);
 public:

@@ -49,20 +49,6 @@
 
 QT_BEGIN_NAMESPACE
 
-QString project_builtin_regx() //calculate the builtin regular expression..
-{
-    QString ret;
-    QStringList builtin_exts;
-    builtin_exts << Option::c_ext << Option::ui_ext << Option::yacc_ext << Option::lex_ext << ".ts" << ".xlf" << ".qrc";
-    builtin_exts += Option::h_ext + Option::cpp_ext;
-    for(int i = 0; i < builtin_exts.size(); ++i) {
-        if(!ret.isEmpty())
-            ret += "; ";
-        ret += QString("*") + builtin_exts[i];
-    }
-    return ret;
-}
-
 ProjectGenerator::ProjectGenerator() : MakefileGenerator(), init_flag(false)
 {
 }
