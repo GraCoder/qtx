@@ -49,6 +49,7 @@
 #include "qstringlist.h"
 #include "qstringmatcher.h"
 #include "qvector.h"
+#include "qvarlengtharray.h"
 #include "private/qfunctions_p.h"
 #include "qregexp.h"
 
@@ -4395,6 +4396,255 @@ QString QRegExp::escape(const QString &str)
     }
     return quoted;
 }
+
+int QRegExp::indexOf(const QString &str, const QRegExp &rx, int from)
+{
+    QRegExp rx2(rx);
+    return rx2.indexIn(str, from);
+}
+
+int QRegExp::lastIndexOf(const QString &str, const QRegExp &rx, int from)
+{
+    QRegExp rx2(rx);
+    return rx2.lastIndexIn(str, from);
+}
+
+QBool QRegExp::contains(const QString &str, const QRegExp &rx)
+{
+    return QBool(indexOf(str, rx) != -1);
+}
+
+int QRegExp::count(const QString &str, const QRegExp &rx)
+{
+    QRegExp rx2(rx);
+    int result = 0;
+    int index = -1;
+    int len = str.length();
+    while (index < len - 1) {
+        index = rx2.indexIn(str, index + 1);
+        if (index == -1)
+            break;
+        result++;
+    }
+    return result;
+}
+
+int QRegExp::indexOf(const QString &str, QRegExp &rx, int from)
+{
+    return rx.indexIn(str, from);
+}
+
+int QRegExp::lastIndexOf(const QString &str, QRegExp &rx, int from)
+{
+    return rx.lastIndexIn(str, from);
+}
+
+QBool QRegExp::contains(const QString &str, QRegExp &rx)
+{
+    return QBool(indexOf(str, rx) != -1);
+}
+
+class QRegExpSectionChunk
+{
+public:
+    QRegExpSectionChunk(int l, QString s) { length = l; string = s; }
+    int length;
+    QString string;
+};
+
+QString QRegExp::section(const QString &str, const QRegExp &reg, int start, int end,
+                         QString::SectionFlags flags)
+{
+    const QChar *uc = str.unicode();
+    if (!uc)
+        return QString();
+
+    QRegExp sep(reg);
+    sep.setCaseSensitivity((flags & QString::SectionCaseInsensitiveSeps) ? Qt::CaseInsensitive
+                                                                         : Qt::CaseSensitive);
+
+    QList<QRegExpSectionChunk> sections;
+    int n = str.length(), m = 0, last_m = 0, last_len = 0;
+    while ((m = sep.indexIn(str, m)) != -1) {
+        sections.append(QRegExpSectionChunk(last_len, QString(uc + last_m, m - last_m)));
+        last_m = m;
+        last_len = sep.matchedLength();
+        m += qMax(sep.matchedLength(), 1);
+    }
+    sections.append(QRegExpSectionChunk(last_len, QString(uc + last_m, n - last_m)));
+
+    if (start < 0)
+        start += sections.count();
+    if (end < 0)
+        end += sections.count();
+
+    QString ret;
+    int x = 0;
+    int first_i = start, last_i = end;
+    for (int i = 0; x <= end && i < sections.size(); ++i) {
+        const QRegExpSectionChunk &section = sections.at(i);
+        const bool empty = section.length == section.string.length();
+        if (x >= start) {
+            if (x == start)
+                first_i = i;
+            if (x == end)
+                last_i = i;
+            if (x != start)
+                ret += section.string;
+            else
+                ret += section.string.mid(section.length);
+        }
+        if (!empty || !(flags & QString::SectionSkipEmpty))
+            x++;
+    }
+    if ((flags & QString::SectionIncludeLeadingSep) && first_i < sections.size()) {
+        const QRegExpSectionChunk &section = sections.at(first_i);
+        ret.prepend(section.string.left(section.length));
+    }
+    if ((flags & QString::SectionIncludeTrailingSep) && last_i + 1 <= sections.size() - 1) {
+        const QRegExpSectionChunk &section = sections.at(last_i + 1);
+        ret += section.string.left(section.length);
+    }
+    return ret;
+}
+
+struct QRegExpStringCapture
+{
+    int pos;
+    int len;
+    int no;
+};
+
+QString QRegExp::replace(const QString &str, const QRegExp &rx, const QString &after)
+{
+    QString result(str);
+    QRegExp rx2(rx);
+
+    if (result.isEmpty() && rx2.indexIn(result) == -1)
+        return result;
+
+    int index = 0;
+    int numCaptures = rx2.captureCount();
+    int al = after.length();
+    CaretMode caretMode = CaretAtZero;
+
+    if (numCaptures > 0) {
+        const QChar *uc = after.unicode();
+        int numBackRefs = 0;
+
+        for (int i = 0; i < al - 1; i++) {
+            if (uc[i] == QLatin1Char('\\')) {
+                int no = uc[i + 1].digitValue();
+                if (no > 0 && no <= numCaptures)
+                    numBackRefs++;
+            }
+        }
+
+        if (numBackRefs > 0) {
+            QVarLengthArray<QRegExpStringCapture, 16> captures(numBackRefs);
+            int j = 0;
+
+            for (int i = 0; i < al - 1; i++) {
+                if (uc[i] == QLatin1Char('\\')) {
+                    int no = uc[i + 1].digitValue();
+                    if (no > 0 && no <= numCaptures) {
+                        QRegExpStringCapture capture;
+                        capture.pos = i;
+                        capture.len = 2;
+
+                        if (i < al - 2) {
+                            int secondDigit = uc[i + 2].digitValue();
+                            if (secondDigit != -1 && ((no * 10) + secondDigit) <= numCaptures) {
+                                no = (no * 10) + secondDigit;
+                                ++capture.len;
+                            }
+                        }
+
+                        capture.no = no;
+                        captures[j++] = capture;
+                    }
+                }
+            }
+
+            while (index <= result.length()) {
+                index = rx2.indexIn(result, index, caretMode);
+                if (index == -1)
+                    break;
+
+                QString after2(after);
+                for (j = numBackRefs - 1; j >= 0; j--) {
+                    const QRegExpStringCapture &capture = captures[j];
+                    after2.replace(capture.pos, capture.len, rx2.cap(capture.no));
+                }
+
+                int matchedLength = rx2.matchedLength();
+                result.replace(index, matchedLength, after2);
+                index += after2.length();
+                if (matchedLength == 0)
+                    ++index;
+                caretMode = CaretWontMatch;
+            }
+            return result;
+        }
+    }
+
+    while (index != -1) {
+        struct {
+            int pos;
+            int length;
+        } replacements[2048];
+
+        int pos = 0;
+        int adjust = 0;
+        while (pos < 2047) {
+            index = rx2.indexIn(result, index, caretMode);
+            if (index == -1)
+                break;
+            int ml = rx2.matchedLength();
+            replacements[pos].pos = index;
+            replacements[pos++].length = ml;
+            index += ml;
+            adjust += al - ml;
+            if (!ml)
+                index++;
+        }
+        if (!pos)
+            break;
+
+        for (int i = pos - 1; i >= 0; --i)
+            result.replace(replacements[i].pos, replacements[i].length, after);
+
+        if (index != -1)
+            index += adjust;
+        caretMode = CaretWontMatch;
+    }
+    return result;
+}
+
+QString QRegExp::remove(const QString &str, const QRegExp &rx)
+{
+    return replace(str, rx, QString());
+}
+
+QStringList QRegExp::split(const QString &str, const QRegExp &rx, QString::SplitBehavior behavior)
+{
+    QRegExp rx2(rx);
+    QStringList list;
+    int start = 0;
+    int extra = 0;
+    int end;
+    while ((end = rx2.indexIn(str, start + extra)) != -1) {
+        int matchedLen = rx2.matchedLength();
+        if (start != end || behavior == QString::KeepEmptyParts)
+            list.append(str.mid(start, end - start));
+        start = end + matchedLen;
+        extra = matchedLen == 0 ? 1 : 0;
+    }
+    if (start != str.size() || behavior == QString::KeepEmptyParts)
+        list.append(str.mid(start));
+    return list;
+}
+
 
 /*!
     \fn bool QRegExp::caseSensitive() const

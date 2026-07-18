@@ -138,6 +138,18 @@ public:
 
     static QString escape(const QString &str);
 
+    static int indexOf(const QString &str, const QRegExp &rx, int from = 0);
+    static int lastIndexOf(const QString &str, const QRegExp &rx, int from = -1);
+    static QBool contains(const QString &str, const QRegExp &rx);
+    static int count(const QString &str, const QRegExp &rx);
+    static int indexOf(const QString &str, QRegExp &rx, int from = 0);
+    static int lastIndexOf(const QString &str, QRegExp &rx, int from = -1);
+    static QBool contains(const QString &str, QRegExp &rx);
+    static QString section(const QString &str, const QRegExp &reg, int start, int end = -1, QString::SectionFlags flags = QString::SectionDefault);
+    static QString replace(const QString &str, const QRegExp &rx, const QString &after);
+    static QString remove(const QString &str, const QRegExp &rx);
+    static QStringList split(const QString &str, const QRegExp &sep, QString::SplitBehavior behavior = QString::KeepEmptyParts);
+
 #ifdef QT3_SUPPORT
     inline QT3_SUPPORT_CONSTRUCTOR QRegExp(const QString &aPattern, bool cs, bool aWildcard = false)
     {
