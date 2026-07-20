@@ -14,6 +14,12 @@ public:
 protected:
   void paintEvent(QPaintEvent *event) override;
 
+signals:
+  void sigTest1();
+
 public slots:
-  void sltTest1();
+  void sltOpenFile();
+
+  void sltTest();
+  void sltTest1(int value2);
 };

@@ -11,6 +11,7 @@
 #include <QToolButton>
 #include <QPainter>
 #include <QLineEdit>
+#include <QColorDialog>
 
 #include <Windows.h>
 #include <tchar.h>
@@ -104,14 +105,17 @@ MainDlg::MainDlg()
   QIcon icon(":/qtest/map.jpg");
   auto btn = new QPushButton;
   btn->setIcon(icon);
-  btn->setIconSize(QSize(128, 128));
-  hlayout->addWidget(btn);
+  btn->setIconSize(QSize(64, 64));
+  hlayout->addWidget(btn, 1);
 
   auto btn1 = new QToolButton;
   btn1->setIcon(QIcon(":/qtest/INTC.svg"));
-  hlayout->addWidget(btn1);
+  hlayout->addWidget(btn1, 1);
 
-  connect(btn, SIGNAL(clicked()), this, SLOT(sltTest1()));
+  connect(btn, SIGNAL(clicked()), this, SLOT(sltTest()));
+  connect(btn1, SIGNAL(clicked()), this, SLOT(sltTest()));
+
+  printf("");
 }
 
 void MainDlg::paintEvent(QPaintEvent *event) 
@@ -119,7 +123,16 @@ void MainDlg::paintEvent(QPaintEvent *event)
   Base::paintEvent(event);
 }
 
-void MainDlg::sltTest1() 
+void MainDlg::sltOpenFile() 
 {
   auto f = QFileDialog::getSaveFileName(this, "save as", ".", "*.*");
+}
+
+void MainDlg::sltTest() 
+{
+  QColorDialog dlg(this);
+  dlg.exec();
+}
+
+void MainDlg::sltTest1(int value) {
 }
