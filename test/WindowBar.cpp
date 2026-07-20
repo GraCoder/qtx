@@ -50,14 +50,16 @@ void WindowBtn::paintEvent(QPaintEvent *ev)
     painter.drawLine(QPoint(qRound(xoft), qRound(yoft + sz)), QPointF(qRound(xoft + sz), qRound(yoft)));
     return;
   } else if (_type == BT_Max) {
-    pen.setWidthF(1);
+    pen.setWidthF(1.25);
     painter.setPen(pen);
-    float sz = std::min<int>(width(), height()) * 0.34;
+    //painter.setRenderHint(QPainter::HighQualityAntialiasing);
+    float sz = std::min<int>(width(), height()) * 0.38;
     int xoft = round((width() - sz) / 2.0);
     int yoft = round((height() - sz) / 2.0);
     if (topLevelWidget()->isMaximized()) {
       constexpr float f1 = 0.2083333;
       constexpr float f2 = 0.75;
+      yoft += static_cast<int>(std::round(sz * 0.2f));
       painter.drawRect(xoft, yoft + sz * f1, f2 * sz, f2 * sz);
       const float f3 = xoft + f1 * sz;
       painter.drawLine(f3, yoft + sz * f1, f3, yoft);
@@ -69,7 +71,7 @@ void WindowBtn::paintEvent(QPaintEvent *ev)
     }
     return;
   } else if (_type == BT_Min) {
-    pen.setWidthF(1);
+    pen.setWidthF(1.25);
     painter.setPen(pen);
     int y = height() / 2.0;
     float sz = std::min<int>(width(), height()) * 0.33;

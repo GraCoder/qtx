@@ -20,7 +20,6 @@ int main(int argc, char **argv)
 
   auto ft = QApplication::font();
   ft.setFamily("Noto Sans SC");
-  ft.setPointSize(12);
   QApplication::setFont(ft);
 
   MainDlg dlg;
